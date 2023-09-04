@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:skillify/core/res/colours.dart';
 import 'package:skillify/core/res/fonts.dart';
+import 'package:skillify/core/services/injection_container.dart';
 import 'package:skillify/core/services/router.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await init();
   runApp(const MyApp());
 }
 

@@ -36,10 +36,11 @@ dependencies:
   video_thumbnail: ^0.5.3
 
 dev_dependencies:
+  bloc_test: ^9.1.4
   flutter_test:
     sdk: flutter
 
-  bloc_test: ^9.1.4
+
   flutter_lints: ^2.0.0
   mocktail: ^1.0.0
   very_good_analysis: ^5.0.0+1
