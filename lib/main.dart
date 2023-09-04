@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skillify/core/res/colours.dart';
 import 'package:skillify/core/res/fonts.dart';
+import 'package:skillify/core/services/router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Skillify',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(accentColor: Colours.primaryColour),
         useMaterial3: true,
