@@ -64,4 +64,63 @@ void main() {
       );
     },
   );
+
+  group(
+    'checkIfUserIsFirstTimer',
+    () {
+      test(
+        'should return true if user is first timer',
+        () async {
+          when(() => localDataSource.checkIfUserIsFirstTimer()).thenAnswer(
+            (_) async => Future.value(true),
+          );
+          final result = await repoImpl.checkIfUserIsFirstTimer();
+          expect(
+            result,
+            equals(const Right<dynamic, bool>(true)),
+          );
+          verify(() => localDataSource.checkIfUserIsFirstTimer()).called(1);
+          verifyNoMoreInteractions(localDataSource);
+        },
+      );
+      test(
+        'should return false when the user is not first timer',
+        () async {
+          when(() => localDataSource.checkIfUserIsFirstTimer()).thenAnswer(
+            (_) async => Future.value(false),
+          );
+          final result = await repoImpl.checkIfUserIsFirstTimer();
+          expect(
+            result,
+            equals(const Right<dynamic, bool>(false)),
+          );
+          verify(() => localDataSource.checkIfUserIsFirstTimer()).called(1);
+          verifyNoMoreInteractions(localDataSource);
+        },
+      );
+      test(
+        'should return [CacheFailure] when call to local source is '
+        'unsuccessful',
+        () async {
+          when(() => localDataSource.checkIfUserIsFirstTimer()).thenThrow(
+            const CacheException(
+              message: 'Insufficient storage',
+              statusCode: 403,
+            ),
+          );
+          final result = await repoImpl.checkIfUserIsFirstTimer();
+          expect(
+            result,
+            equals(
+              Left<CacheFailure, dynamic>(
+                CacheFailure(message: 'Insufficient storage', statusCode: 403),
+              ),
+            ),
+          );
+          verify(() => localDataSource.checkIfUserIsFirstTimer()).called(1);
+          verifyNoMoreInteractions(localDataSource);
+        },
+      );
+    },
+  );
 }
