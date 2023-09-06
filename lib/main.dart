@@ -3,9 +3,15 @@ import 'package:skillify/core/res/colours.dart';
 import 'package:skillify/core/res/fonts.dart';
 import 'package:skillify/core/services/injection_container.dart';
 import 'package:skillify/core/services/router.dart';
+import 'package:skillify/credentials.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: Credentials.supabseUrl,
+    anonKey: Credentials.supabaseKey,
+  );
   await init();
   runApp(const MyApp());
 }

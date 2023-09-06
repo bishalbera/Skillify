@@ -35,6 +35,8 @@ dependencies:
   youtube_metadata: ^1.0.1
   video_thumbnail: ^0.5.3
   rive: ^0.11.4
+  supabase_flutter: ^1.10.16
+
 
 dev_dependencies:
   bloc_test: ^9.1.4
