@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:skillify/core/common/app/providers/user_provider.dart';
 import 'package:skillify/core/res/colours.dart';
 import 'package:skillify/core/res/fonts.dart';
 import 'package:skillify/core/services/injection_container.dart';
@@ -21,19 +23,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Skillify',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(accentColor: Colours.primaryColour),
-        useMaterial3: true,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        fontFamily: Fonts.poppins,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.transparent,
+    return ChangeNotifierProvider(
+      create: (_) => UserProvider(),
+      child: MaterialApp(
+        title: 'Skillify',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme:
+              ColorScheme.fromSwatch(accentColor: Colours.primaryColour),
+          useMaterial3: true,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          fontFamily: Fonts.poppins,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.transparent,
+          ),
         ),
+        onGenerateRoute: generateRoute,
       ),
-      onGenerateRoute: generateRoute,
     );
   }
 }

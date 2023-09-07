@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
 import 'package:skillify/core/extensions/context_extension.dart';
 import 'package:skillify/core/res/fonts.dart';
 import 'package:skillify/src/on_boarding/domain/entities/page_content.dart';
+import 'package:skillify/src/on_boarding/presentation/cubit/on_boarding_cubit.dart';
 import 'package:skillify/src/on_boarding/presentation/widgets/animated_button.dart';
 
 class OnBoardingBody extends StatefulWidget {
@@ -86,6 +88,7 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
                         btnAnimationController: _btnAnimationController,
                         press: () {
                           _btnAnimationController.isActive = true;
+                          context.read<OnBoardingCubit>().cacheFirstTimer();
                         },
                         text: 'Get Started',
                       ),

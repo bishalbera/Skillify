@@ -36,6 +36,7 @@ dependencies:
   video_thumbnail: ^0.5.3
   rive: ^0.11.4
   supabase_flutter: ^1.10.16
+  supabase_auth_ui: ^0.2.1
 
 
 dev_dependencies:
