@@ -82,12 +82,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       var userData = await _getUserData(user.id);
       if (userData.isNotEmpty) {
-        return LocalUserModel.fromMap(userData.values as DataMap);
+        return LocalUserModel.fromMap(userData);
       }
 
       await _setUserData(user, email);
       userData = await _getUserData(user.id);
-      return LocalUserModel.fromMap(userData.values as DataMap);
+      return LocalUserModel.fromMap(userData);
     } on AuthException catch (e) {
       throw ServerException(
         message: e.message ?? 'Error Occured',
@@ -109,11 +109,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
   }) async {
     try {
-      final res = await _client.auth.signUp(email: email, password: password);
-      await _client.from('users').upsert({
-        'name': name,
-      });
-      await _setUserData(res.user, email);
+      final res = await _client.auth.signUp(
+        email: email,
+        password: password,
+        data: {'name': name},
+      );
+
+      await _setUserData(res.user!, email);
     } on AuthException catch (e) {
       throw ServerException(
         message: e.message ?? 'Error Occured',
@@ -199,27 +201,41 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
   }
 
-  Future<DataMap> _getUserData(String uid) async {
-    return await _client.from('users').select().eq('uid', uid).single()
-        as DataMap;
+  Future<Map<String, dynamic>> _getUserData(String id) async {
+    return await _client
+        .from('users')
+        .select<Map<String, dynamic>>()
+        .eq('id', id)
+        .single();
   }
 
-  Future<void> _setUserData(user, String fallbackEmail) async {
-    await _client.from('users').upsert({
-      LocalUserModel(
-        uid: user.id.toString(),
-        name: user.userMetadata!.name.toString() ?? '',
-        email: user.email.toString() ?? fallbackEmail,
-        profilePic: user.userMetadata!.photoUrl.toString() ?? '',
+  Future<void> _setUserData(User user, String fallbackEmail) async {
+    try {
+      final data = LocalUserModel(
+        id: user.id,
+        name: user.userMetadata!['name'].toString(),
+        email: user.email?.toString() ?? fallbackEmail,
+        profilePic: user.userMetadata!['photo_url'].toString() ?? '',
         points: 0,
-      ).toMap(),
-    });
+        bio: '',
+      );
+      final response = await _client.from('users').upsert(data.toMap());
+      // if (response.error != null) {
+      //   print(response.error?.message);
+      //   throw Exception(
+      //     'failed to set user data: ${response.error?.message}',
+      //   );
+      // }
+    } on PostgrestException catch (e) {
+      print(e.message);
+      throw ServerException(message: e.message, statusCode: e.code);
+    }
   }
 
   Future<void> _updateUserData(DataMap data) async {
     await _client
         .from('users')
         .update(data)
-        .eq('uid', _client.auth.currentUser?.id);
+        .eq('id', _client.auth.currentUser?.id);
   }
 }

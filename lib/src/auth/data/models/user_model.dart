@@ -3,7 +3,7 @@ import 'package:skillify/src/auth/domain/entities/user.dart';
 
 class LocalUserModel extends LocalUser {
   const LocalUserModel({
-    required super.uid,
+    required super.id,
     required super.email,
     required super.name,
     required super.points,
@@ -17,7 +17,7 @@ class LocalUserModel extends LocalUser {
 
   const LocalUserModel.empty()
       : this(
-          uid: '',
+          id: '',
           email: '',
           name: '',
           points: 0,
@@ -25,7 +25,7 @@ class LocalUserModel extends LocalUser {
 
   LocalUserModel.fromMap(DataMap map)
       : super(
-          uid: map['uid'] as String,
+          id: map['id'] as String,
           email: map['email'] as String,
           name: map['name'] as String,
           profilePic: map['profilePic'] as String?,
@@ -39,7 +39,7 @@ class LocalUserModel extends LocalUser {
         );
 
   LocalUser copyWith({
-    String? uid,
+    String? id,
     String? email,
     String? name,
     String? profilePic,
@@ -51,7 +51,7 @@ class LocalUserModel extends LocalUser {
     List<String>? followers,
   }) {
     return LocalUser(
-      uid: uid ?? this.uid,
+      id: id ?? this.id,
       email: email ?? this.email,
       name: name ?? this.name,
       profilePic: profilePic ?? this.profilePic,
@@ -66,7 +66,22 @@ class LocalUserModel extends LocalUser {
 
   DataMap toMap() {
     return {
-      'uid': uid,
+      'id': id,
+      'email': email,
+      'name': name,
+      'profilePic': profilePic,
+      'bio': bio,
+      'points': points,
+      'groupIds': groupIds,
+      'enrolledCourseIds': enrolledCourseIds,
+      'following': following,
+      'followers': followers,
+    };
+  }
+
+  DataMap toJson() {
+    return {
+      'id': id,
       'email': email,
       'name': name,
       'profilePic': profilePic,

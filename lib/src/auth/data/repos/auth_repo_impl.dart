@@ -23,8 +23,10 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  ResultFuture<LocalUser> signIn(
-      {required String email, required String password}) async {
+  ResultFuture<LocalUser> signIn({
+    required String email,
+    required String password,
+  }) async {
     try {
       final result = await _remoteDataSource.signIn(
         email: email,
@@ -70,4 +72,3 @@ class AuthRepoImpl implements AuthRepo {
     }
   }
 }
-

@@ -34,7 +34,7 @@ void main() {
       test(
         'should throw an [Error] when the map is invalid',
         () {
-          final map = DataMap.from(tMap)..remove('uid');
+          final map = DataMap.from(tMap)..remove('id');
 
           const call = LocalUserModel.fromMap;
 
@@ -48,7 +48,7 @@ void main() {
     'toMap',
     () {
       test(
-        'should return a valid [DaraMap] from the model',
+        'should return a valid [DataMap] from the model',
         () {
           final result = tLocalUserModel.toMap();
           expect(result, isA<DataMap>());
@@ -64,9 +64,9 @@ void main() {
       test(
         'should return a valid [LocalUserModel] with updated value',
         () {
-          final result = tLocalUserModel.copyWith(uid: '2');
+          final result = tLocalUserModel.copyWith(id: '2');
 
-          expect(result.uid, equals('2'));
+          expect(result.id, equals('2'));
         },
       );
     },
