@@ -6,6 +6,7 @@ import 'package:skillify/core/res/fonts.dart';
 import 'package:skillify/core/services/injection_container.dart';
 import 'package:skillify/core/services/router.dart';
 import 'package:skillify/credentials.dart';
+import 'package:skillify/src/dashboard/providers/dashboard_controller.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -23,8 +24,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => UserProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => DashboardController()),
+      ],
       child: MaterialApp(
         title: 'Skillify',
         debugShowCheckedModeBanner: false,

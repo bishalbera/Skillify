@@ -37,6 +37,7 @@ dependencies:
   rive: ^0.11.4
   supabase_flutter: ^1.10.16
   supabase_auth_ui: ^0.2.1
+  uuid: ^4.0.0
 
 
 dev_dependencies:
