@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:skillify/core/common/app/providers/bottom_navigator.dart';
 import 'package:skillify/core/common/views/persistent_view.dart';
+import 'package:skillify/src/profile/presentation/views/profile_view.dart';
 
 class DashboardController extends ChangeNotifier {
   List<int> _indexHistory = [0];
@@ -19,7 +20,7 @@ class DashboardController extends ChangeNotifier {
       child: const PersistentView(),
     ),
     ChangeNotifierProvider(
-      create: (_) => BottomNavigator(BottomItem(child: const Placeholder())),
+      create: (_) => BottomNavigator(BottomItem(child: const ProfileView())),
       child: const PersistentView(),
     ),
   ];

@@ -40,7 +40,18 @@ class LocalUser extends Equatable {
   final List<String> followers;
 
   @override
-  List<Object?> get props => [id, email];
+  List<Object?> get props => [
+        id,
+        email,
+        profilePic,
+        bio,
+        points,
+        name,
+        groupIds.length,
+        enrolledCourseIds.length,
+        following.length,
+        followers.length,
+      ];
 
   @override
   String toString() {
