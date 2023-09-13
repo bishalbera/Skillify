@@ -4,7 +4,7 @@ import 'package:skillify/core/utils/typedef.dart';
 abstract class CourseRepo {
   const CourseRepo();
 
-  ResultFuture<List<Course>> getCourse();
+  ResultFuture<List<Course>> getCourses();
 
   ResultFuture<void> addCourse(Course course);
 }
