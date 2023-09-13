@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:skillify/core/enums/update_user.dart';
@@ -138,18 +139,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       switch (action) {
         case UpdateUserAction.profilePic:
-          final imagePath = 'profile_pics/${_client.auth.currentUser?.id}';
+          final imagePath = '/${_client.auth.currentUser?.id}/profile_pics';
 
-          await _dbClient.createBucket('profile_pics');
-          await _dbClient.updateBucket(
-            'profile_pics',
-            const BucketOptions(public: true),
-          );
+          // await _dbClient.createBucket('profile_pics');
+          // await _dbClient.updateBucket(
+          //   'profile_pics',
+          //   const BucketOptions(public: true),
+          // );
           await _dbClient.from('profile_pics').upload(
                 imagePath,
                 userData as File,
+                fileOptions: const FileOptions(
+                  upsert: true,
+                ),
               );
-          final url = _dbClient.from('profile_pics').getPublicUrl(imagePath);
+          var url = _dbClient.from('profile_pics').getPublicUrl(imagePath);
+          url = Uri.parse(url).replace(
+            queryParameters: {
+              'profilePic': DateTime.now().millisecondsSinceEpoch.toString()
+            },
+          ).toString();
 
           await _client.auth.updateUser(
             UserAttributes(
@@ -187,6 +196,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         case UpdateUserAction.bio:
           await _updateUserData({'bio': userData as String});
       }
+    } on StorageException catch (e) {
+      throw ServerException(
+        message: e.message ?? 'storage error occured',
+        statusCode: e.statusCode,
+      );
     } on AuthException catch (e) {
       throw ServerException(
         message: e.message ?? 'Error Occured',
@@ -215,7 +229,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         id: user.id,
         name: user.userMetadata!['name'].toString(),
         email: user.email?.toString() ?? fallbackEmail,
-        profilePic: user.userMetadata!['photo_url'].toString() ?? '',
+        profilePic: user.userMetadata!['profilePic'].toString() ?? '',
         points: 0,
         bio: '',
       );

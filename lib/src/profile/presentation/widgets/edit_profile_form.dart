@@ -43,7 +43,7 @@ class EditProfileForm extends StatelessWidget {
             oldPasswordController.addListener(() => setState(() {}));
             return EditProfileFormField(
               controller: passwordController,
-              fieldTitle: 'New passwordController',
+              fieldTitle: 'New Password',
               hintText: '********',
               readOnly: oldPasswordController.text.isEmpty,
             );
