@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:skillify/core/errors/exceptions.dart';
 import 'package:skillify/core/utils/typedef.dart';
 import 'package:skillify/src/chat/data/models/group_model.dart';
-import 'package:skillify/src/chat/domain/entities/group.dart';
 import 'package:skillify/src/course/data/models/course_model.dart';
 import 'package:skillify/src/course/domain/entities/course.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
