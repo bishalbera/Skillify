@@ -1,5 +1,5 @@
-import 'package:skillify/core/common/features/course/domain/entities/course.dart';
 import 'package:skillify/core/utils/typedef.dart';
+import 'package:skillify/src/course/domain/entities/course.dart';
 
 abstract class CourseRepo {
   const CourseRepo();

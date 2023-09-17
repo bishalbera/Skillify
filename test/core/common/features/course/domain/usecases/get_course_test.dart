@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:skillify/core/common/features/course/domain/entities/course.dart';
-import 'package:skillify/core/common/features/course/domain/repos/course_repo.dart';
-import 'package:skillify/core/common/features/course/domain/usecases/get_courses.dart';
+import 'package:skillify/src/course/domain/entities/course.dart';
+import 'package:skillify/src/course/domain/repos/course_repo.dart';
+import 'package:skillify/src/course/domain/usecases/get_courses.dart';
 
 import 'course_repo.mock.dart';
 

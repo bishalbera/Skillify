@@ -1,7 +1,7 @@
-import 'package:skillify/core/common/features/course/data/datasources/course_remote_data_src.dart';
-import 'package:skillify/core/common/features/course/domain/entities/course.dart';
-import 'package:skillify/core/common/features/course/domain/repos/course_repo.dart';
 import 'package:skillify/core/utils/typedef.dart';
+import 'package:skillify/src/course/data/datasources/course_remote_data_src.dart';
+import 'package:skillify/src/course/domain/entities/course.dart';
+import 'package:skillify/src/course/domain/repos/course_repo.dart';
 
 class CourseRepoImpl implements CourseRepo {
   const CourseRepoImpl(this._remoteDataSrc);
