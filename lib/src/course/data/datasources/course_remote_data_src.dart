@@ -15,8 +15,8 @@ abstract class CourseRemoteDataSrc {
   Future<void> addCourse(Course course);
 }
 
-class RemoteDataSrcImpl implements CourseRemoteDataSrc {
-  const RemoteDataSrcImpl({
+class CourseRemoteDataSrcImpl implements CourseRemoteDataSrc {
+  const CourseRemoteDataSrcImpl({
     required SupabaseClient client,
     required SupabaseStorageClient dbClient,
   })  : _client = client,

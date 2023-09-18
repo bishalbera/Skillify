@@ -1,14 +1,25 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:skillify/core/common/app/providers/bottom_navigator.dart';
 import 'package:skillify/core/common/views/persistent_view.dart';
+import 'package:skillify/core/services/injection_container.dart';
+import 'package:skillify/src/course/presentation/cubit/course_cubit.dart';
+import 'package:skillify/src/home/presentation/views/home_view.dart';
 import 'package:skillify/src/profile/presentation/views/profile_view.dart';
 
 class DashboardController extends ChangeNotifier {
   List<int> _indexHistory = [0];
   final List<Widget> _screens = [
     ChangeNotifierProvider(
-      create: (_) => BottomNavigator(BottomItem(child: const Placeholder())),
+      create: (_) => BottomNavigator(
+        BottomItem(
+          child: BlocProvider(
+            create: (_) => sl<CourseCubit>(),
+            child: const HomeView(),
+          ),
+        ),
+      ),
       child: const PersistentView(),
     ),
     ChangeNotifierProvider(
