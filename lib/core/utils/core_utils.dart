@@ -31,6 +31,7 @@ class CoreUtils {
 
   static void showLoadingDialog(BuildContext context) {
     showDialog<void>(
+      barrierDismissible: false,
       context: context,
       builder: (_) => const Center(
         child: CircularProgressIndicator(),

@@ -6,6 +6,7 @@ import 'package:skillify/core/common/widgets/not_found_text.dart';
 import 'package:skillify/core/utils/core_utils.dart';
 import 'package:skillify/src/course/presentation/cubit/course_cubit.dart';
 import 'package:skillify/src/home/presentation/widgets/home_header.dart';
+import 'package:skillify/src/home/presentation/widgets/home_subjects.dart';
 
 class HomeBody extends StatefulWidget {
   const HomeBody({super.key});
