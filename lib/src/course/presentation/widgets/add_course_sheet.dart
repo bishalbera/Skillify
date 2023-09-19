@@ -52,6 +52,7 @@ class _AddCourseSheetState extends State<AddCourseSheet> {
     return BlocListener<CourseCubit, CourseState>(
       listener: (_, state) {
         if (state is CourseError) {
+          print(state.message);
           CoreUtils.showSnackBar(context, state.message);
         } else if (state is AddingCourse) {
           loading = true;

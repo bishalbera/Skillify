@@ -8,6 +8,8 @@ import 'package:skillify/src/auth/data/models/user_model.dart';
 import 'package:skillify/src/auth/presentation/bloc/auth_bloc.dart';
 import 'package:skillify/src/auth/presentation/views/sign_in_screen.dart';
 import 'package:skillify/src/auth/presentation/views/sign_up_screen.dart';
+import 'package:skillify/src/course/domain/entities/course.dart';
+import 'package:skillify/src/course/presentation/views/course_details_screen.dart';
 import 'package:skillify/src/dashboard/presentation/views/dashboard.dart';
 import 'package:skillify/src/on_boarding/data/dataSources/on_boarding_local_data_sources.dart';
 import 'package:skillify/src/on_boarding/presentation/cubit/on_boarding_cubit.dart';

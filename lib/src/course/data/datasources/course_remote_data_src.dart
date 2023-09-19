@@ -6,6 +6,7 @@ import 'package:skillify/src/chat/data/models/group_model.dart';
 import 'package:skillify/src/course/data/models/course_model.dart';
 import 'package:skillify/src/course/domain/entities/course.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class CourseRemoteDataSrc {
   const CourseRemoteDataSrc();
@@ -35,14 +36,21 @@ class CourseRemoteDataSrcImpl implements CourseRemoteDataSrc {
           statusCode: '401',
         );
       }
-      final courseRef = await _client.from('courses').select('*');
-      final courseRefId = await _client.from('courses').select('id');
-      final groupRef = await _client.from('groups').select('*');
-      final groupRefId = await _client.from('groups').select('id');
+      // final courseRef = await _client.from('courses').select();
+      // final courseRefId = await _client
+      //     .from('courses')
+      //     .insert([
+      //       {'id'}
+      //     ])
+      //     .select()
+      //     .limit(1)
+      //     .single();
+      // final groupRef = await _client.from('groups').select();
+      // final groupRefId = await _client.from('groups').select('id');
 
       var courseModel = (course as CourseModel).copyWith(
-        id: courseRefId as String,
-        groupId: groupRefId as String,
+        id: const Uuid().v1(),
+        groupId: const Uuid().v1(),
       );
       if (courseModel.imageIsFile) {
         final imagePath = 'courses/${courseModel.id}/profile_image'
@@ -60,9 +68,9 @@ class CourseRemoteDataSrcImpl implements CourseRemoteDataSrc {
       await _client.from('courses').upsert(courseModel.toMap());
 
       final group = GroupModel(
-        id: groupRefId,
+        id: courseModel.groupId,
         name: course.title,
-        courseId: courseRefId,
+        courseId: courseModel.id,
         members: const [],
         groupImageUrl: courseModel.image,
       );
