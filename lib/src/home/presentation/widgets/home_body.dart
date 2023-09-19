@@ -32,7 +32,7 @@ class _HomeBodyState extends State<HomeBody> {
       listener: (_, state) {
         if (state is CourseError) {
           CoreUtils.showSnackBar(context, state.message);
-        } else if (state is CourseLoaded && state.courses.isNotEmpty) {
+        } else if (state is CoursesLoaded && state.courses.isNotEmpty) {
           final courses = state.courses..shuffle();
           final courseOfTheDay = courses.first;
           context
@@ -41,15 +41,15 @@ class _HomeBodyState extends State<HomeBody> {
         }
       },
       builder: (context, state) {
-        if (state is LoadingCourse) {
+        if (state is LoadingCourses) {
           return const LoadingView();
-        } else if (state is CourseLoaded && state.courses.isEmpty ||
+        } else if (state is CoursesLoaded && state.courses.isEmpty ||
             state is CourseError) {
           return const NotFoundText(
             'No courses found\nPlease contact admin or if you are admin, '
             'add courses',
           );
-        } else if (state is CourseLoaded) {
+        } else if (state is CoursesLoaded) {
           final courses = state.courses
             ..sort(
               (a, b) => b.updatedAt.compareTo(a.updatedAt),

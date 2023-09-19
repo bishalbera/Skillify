@@ -59,6 +59,9 @@ class CourseModel extends Course {
     return CourseModel(
       id: id ?? this.id,
       title: title ?? this.title,
+      description: description ?? this.description,
+      image: image ?? this.image,
+      imageIsFile: imageIsFile ?? this.imageIsFile,
       numberOfExams: numberOfExams ?? this.numberOfExams,
       numberOfMaterials: numberOfMaterials ?? this.numberOfMaterials,
       numberOfVideos: numberOfVideos ?? this.numberOfVideos,

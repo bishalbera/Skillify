@@ -7,8 +7,10 @@ import 'package:skillify/src/course/domain/usecases/get_courses.dart';
 part 'course_state.dart';
 
 class CourseCubit extends Cubit<CourseState> {
-  CourseCubit({required AddCourse addCourse, required GetCourses getCourses})
-      : _addCourse = addCourse,
+  CourseCubit({
+    required AddCourse addCourse,
+    required GetCourses getCourses,
+  })  : _addCourse = addCourse,
         _getCourses = getCourses,
         super(const CourseInitial());
 
@@ -25,11 +27,11 @@ class CourseCubit extends Cubit<CourseState> {
   }
 
   Future<void> getCourses() async {
-    emit(const LoadingCourse());
+    emit(const LoadingCourses());
     final result = await _getCourses();
     result.fold(
       (failure) => emit(CourseError(failure.errorMessage)),
-      (courses) => emit(CourseLoaded(courses)),
+      (courses) => emit(CoursesLoaded(courses)),
     );
   }
 }

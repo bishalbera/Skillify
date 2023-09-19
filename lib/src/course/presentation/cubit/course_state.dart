@@ -11,8 +11,8 @@ class CourseInitial extends CourseState {
   const CourseInitial();
 }
 
-class LoadingCourse extends CourseState {
-  const LoadingCourse();
+class LoadingCourses extends CourseState {
+  const LoadingCourses();
 }
 
 class AddingCourse extends CourseState {
@@ -23,8 +23,8 @@ class CourseAdded extends CourseState {
   const CourseAdded();
 }
 
-class CourseLoaded extends CourseState {
-  const CourseLoaded(this.courses);
+class CoursesLoaded extends CourseState {
+  const CoursesLoaded(this.courses);
 
   final List<Course> courses;
 

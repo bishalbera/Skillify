@@ -31,7 +31,7 @@ class ProfileBody extends StatelessWidget {
                     infoIcon: const Icon(
                       IconlyLight.document,
                       size: 24,
-                      color: Color(0xFF767dff),
+                      color: Color(0xFF767DFF),
                     ),
                     infoTitle: 'Courses',
                     infoValue: user!.enrolledCourseIds.length.toString(),

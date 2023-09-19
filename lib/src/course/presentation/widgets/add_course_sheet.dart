@@ -61,8 +61,10 @@ class _AddCourseSheetState extends State<AddCourseSheet> {
             loading = false;
             Navigator.pop(context);
           }
-          CoreUtils.showSnackBar(context, 'Course Added Successfully');
+          CoreUtils.showSnackBar(context, 'Course added successfully');
           Navigator.pop(context);
+          // CoreUtils.showLoadingDialog(context);
+          // TODO(Add-Course): Send Notifications
         }
       },
       child: Padding(

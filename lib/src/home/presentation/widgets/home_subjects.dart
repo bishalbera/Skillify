@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:skillify/core/common/widgets/course_tile.dart';
 import 'package:skillify/core/extensions/context_extension.dart';
 import 'package:skillify/core/res/colours.dart';
 import 'package:skillify/src/course/domain/entities/course.dart';
+import 'package:skillify/src/course/presentation/views/all_courses_view.dart';
+import 'package:skillify/src/course/presentation/views/course_details_screen.dart';
 import 'package:skillify/src/home/presentation/widgets/section_header.dart';
 
 class HomeSubjects extends StatelessWidget {

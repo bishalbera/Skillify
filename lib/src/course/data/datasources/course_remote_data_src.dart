@@ -35,9 +35,9 @@ class CourseRemoteDataSrcImpl implements CourseRemoteDataSrc {
           statusCode: '401',
         );
       }
-      final courseRef = await _client.from('courses').select();
+      final courseRef = await _client.from('courses').select('*');
       final courseRefId = await _client.from('courses').select('id');
-      final groupRef = await _client.from('groups').select();
+      final groupRef = await _client.from('groups').select('*');
       final groupRefId = await _client.from('groups').select('id');
 
       var courseModel = (course as CourseModel).copyWith(
@@ -57,7 +57,7 @@ class CourseRemoteDataSrcImpl implements CourseRemoteDataSrc {
         final url = _dbClient.from('courses').getPublicUrl(imagePath);
         courseModel = courseModel.copyWith(image: url);
       }
-      await _client.from('users').upsert(courseModel.toMap());
+      await _client.from('courses').upsert(courseModel.toMap());
 
       final group = GroupModel(
         id: groupRefId,
