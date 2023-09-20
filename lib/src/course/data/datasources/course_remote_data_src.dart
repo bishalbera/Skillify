@@ -55,15 +55,19 @@ class CourseRemoteDataSrcImpl implements CourseRemoteDataSrc {
       if (courseModel.imageIsFile) {
         final imagePath = 'courses/${courseModel.id}/profile_image'
             '/${courseModel.title}-pfp';
-        final imageRef = await _dbClient.from('courses').upload(
+        final imageRef = await _dbClient
+            .from('courses')
+            .upload(
               imagePath,
               File(courseModel.image!),
               fileOptions: const FileOptions(
                 upsert: true,
               ),
-            );
-        final url = _dbClient.from('courses').getPublicUrl(imagePath);
-        courseModel = courseModel.copyWith(image: url);
+            )
+            .then((value) async {
+          final url = _dbClient.from('courses').getPublicUrl(imagePath);
+          courseModel = courseModel.copyWith(image: url);
+        });
       }
       await _client.from('courses').upsert(courseModel.toMap());
 
