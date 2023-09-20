@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:js_interop';
 
 import 'package:skillify/core/errors/exceptions.dart';
 import 'package:skillify/core/utils/datasource_utils.dart';
