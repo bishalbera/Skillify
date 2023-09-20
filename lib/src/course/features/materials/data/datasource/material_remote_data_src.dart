@@ -3,18 +3,18 @@ import 'dart:io';
 import 'package:skillify/core/errors/exceptions.dart';
 import 'package:skillify/core/utils/datasource_utils.dart';
 import 'package:skillify/core/utils/typedef.dart';
-import 'package:skillify/src/course/features/videos/data/models/video_model.dart';
-import 'package:skillify/src/course/features/videos/domain/entities/video.dart';
+import 'package:skillify/src/course/features/materials/data/models/resource_model.dart';
+import 'package:skillify/src/course/features/materials/domain/entities/resource.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-abstract class VideoRemoteDataSrc {
-  Future<List<VideoModel>> getVideos(String courseId);
+abstract class MaterialRemoteDataSrc {
+  Future<List<ResourceModel>> getMaterials(String courseId);
 
-  Future<void> addVideo(Video video);
+  Future<void> addMaterial(Resource material);
 }
 
-class VideoRemoteDataSrcImpl implements VideoRemoteDataSrc {
-  VideoRemoteDataSrcImpl({
+class MaterialRemoteDataSrcImpl implements MaterialRemoteDataSrc {
+  MaterialRemoteDataSrcImpl({
     required SupabaseClient client,
     required SupabaseStorageClient dbClient,
   })  : _client = client,
@@ -24,43 +24,44 @@ class VideoRemoteDataSrcImpl implements VideoRemoteDataSrc {
   final SupabaseStorageClient _dbClient;
 
   @override
-  Future<void> addVideo(Video video) async {
-    VideoModel? videoModel;
+  Future<void> addMaterial(Resource material) async {
+    ResourceModel? resourceModel;
     try {
       await DataSourceUtils.authorizeUser(_client);
 
-      if (video.thumbnailIsFile) {
-        final thumbnailFilePath =
-            'courses/${video.courseId}/videos/${video.id}/thumbnail';
+      if (material.isFile) {
+        final materialFilePath =
+            'courses/${material.courseId}/materials/${material.id}/material';
         await _dbClient
             .from('courses')
             .upload(
-              thumbnailFilePath,
-              File(video.thumbnail!),
+              materialFilePath,
+              File(material.fileURL),
               fileOptions: const FileOptions(
                 upsert: true,
               ),
             )
             .then((value) async {
-          final url = _dbClient.from('courses').getPublicUrl(thumbnailFilePath);
-          var videoModel = (video as VideoModel).copyWith(thumbnail: url);
+          final url = _dbClient.from('courses').getPublicUrl(materialFilePath);
+          var materialModel =
+              (Resource as ResourceModel).copyWith(fileURL: url);
         });
       }
 
-      if (videoModel != null) {
-        await _client.from('videos').upsert(videoModel.toMap());
+      if (resourceModel != null) {
+        await _client.from('materials').upsert(resourceModel.toMap());
       }
 
       final response = await _client
           .from('courses')
-          .select<PostgrestResponse>('numberOfVideos')
-          .eq('id', video.courseId)
+          .select<PostgrestResponse>('numberOfMaterials')
+          .eq('id', material.courseId)
           .single();
-      final currentNumberOfVideos = response.data!['numberOfVideos'];
+      final currentNumberOfMaterials = response.data!['numberOfMaterials'];
 
       final updateResponse = await _client.from('courses').update({
-        'numberOfVideos': currentNumberOfVideos + 1,
-      }).eq('id', video.courseId);
+        'numberOfMaterials': currentNumberOfMaterials + 1,
+      }).eq('id', material.courseId);
     } on StorageException catch (e) {
       throw ServerException(
         message: e.message ?? 'Unknown error occured',
@@ -74,15 +75,15 @@ class VideoRemoteDataSrcImpl implements VideoRemoteDataSrc {
   }
 
   @override
-  Future<List<VideoModel>> getVideos(String courseId) async {
+  Future<List<ResourceModel>> getMaterials(String courseId) async {
     try {
       await DataSourceUtils.authorizeUser(_client);
       final response = await _client
-          .from('videos')
+          .from('materials')
           .select<PostgrestResponse>()
           .eq('courseId', courseId);
       return (response.data as List)
-          .map((video) => VideoModel.fromMap(video as DataMap))
+          .map((material) => ResourceModel.fromMap(material as DataMap))
           .toList();
     } on StorageException catch (e) {
       throw ServerException(

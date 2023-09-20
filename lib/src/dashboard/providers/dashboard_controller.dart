@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:skillify/core/common/app/providers/bottom_navigator.dart';
 import 'package:skillify/core/common/views/persistent_view.dart';
 import 'package:skillify/core/services/injection_container.dart';
-import 'package:skillify/src/course/features/videos/cubit/video_cubit.dart';
+import 'package:skillify/src/course/features/videos/presentation/cubit/video_cubit.dart';
+
 import 'package:skillify/src/course/presentation/cubit/course_cubit.dart';
 import 'package:skillify/src/home/presentation/views/home_view.dart';
 import 'package:skillify/src/profile/presentation/views/profile_view.dart';
