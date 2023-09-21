@@ -2,7 +2,7 @@ import 'package:skillify/core/usecases/usecases.dart';
 import 'package:skillify/core/utils/typedef.dart';
 import 'package:skillify/src/auth/domain/repos/auth_repo.dart';
 
-class ForgotPassword extends UseCaseWithParams<void, String> {
+class ForgotPassword extends FutureUsecaseWithParams<void, String> {
   const ForgotPassword(this._repo);
   final AuthRepo _repo;
 

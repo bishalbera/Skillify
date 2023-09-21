@@ -3,7 +3,8 @@ import 'package:skillify/core/utils/typedef.dart';
 import 'package:skillify/src/course/features/exams/domain/entities/user_exam.dart';
 import 'package:skillify/src/course/features/exams/domain/repos/exam_repo.dart';
 
-class GetUserCourseExams extends UseCaseWithParams<List<UserExam>, String> {
+class GetUserCourseExams
+    extends FutureUsecaseWithParams<List<UserExam>, String> {
   const GetUserCourseExams(this._repo);
 
   final ExamRepo _repo;

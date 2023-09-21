@@ -4,7 +4,7 @@ import 'package:skillify/core/usecases/usecases.dart';
 import 'package:skillify/core/utils/typedef.dart';
 import 'package:skillify/src/auth/domain/repos/auth_repo.dart';
 
-class UpdateUser extends UseCaseWithParams<void, UpdateUserParams> {
+class UpdateUser extends FutureUsecaseWithParams<void, UpdateUserParams> {
   const UpdateUser(this._repo);
   final AuthRepo _repo;
 

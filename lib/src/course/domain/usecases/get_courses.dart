@@ -3,7 +3,7 @@ import 'package:skillify/core/utils/typedef.dart';
 import 'package:skillify/src/course/domain/entities/course.dart';
 import 'package:skillify/src/course/domain/repos/course_repo.dart';
 
-class GetCourses extends UseCaseWithoutParams<List<Course>> {
+class GetCourses extends FutureUsecaseWithoutParams<List<Course>> {
   const GetCourses(this._repo);
   final CourseRepo _repo;
 

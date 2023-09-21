@@ -3,7 +3,7 @@ import 'package:skillify/core/utils/typedef.dart';
 import 'package:skillify/src/course/features/materials/domain/entities/resource.dart';
 import 'package:skillify/src/course/features/materials/domain/repos/material_repo.dart';
 
-class AddMaterial extends UseCaseWithParams<void, Resource> {
+class AddMaterial extends FutureUsecaseWithParams<void, Resource> {
   const AddMaterial(this._repo);
 
   final MaterialRepo _repo;

@@ -4,7 +4,8 @@ import 'package:skillify/src/course/features/exams/domain/entities/exam.dart';
 import 'package:skillify/src/course/features/exams/domain/entities/exam_question.dart';
 import 'package:skillify/src/course/features/exams/domain/repos/exam_repo.dart';
 
-class GetExamQuestions extends UseCaseWithParams<List<ExamQuestion>, Exam> {
+class GetExamQuestions
+    extends FutureUsecaseWithParams<List<ExamQuestion>, Exam> {
   const GetExamQuestions(this._repo);
 
   final ExamRepo _repo;
