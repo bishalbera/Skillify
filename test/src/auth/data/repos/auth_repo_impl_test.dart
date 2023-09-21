@@ -86,7 +86,7 @@ void main() {
           when(() => remoteDataSource.signIn(
                 email: any(named: 'email'),
                 password: any(named: 'password'),
-              )).thenAnswer(
+              ),).thenAnswer(
             (_) async => tUser,
           );
           final result = await repoImpl.signIn(

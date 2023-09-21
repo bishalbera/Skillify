@@ -6,7 +6,7 @@ class UserInfoCard extends StatelessWidget {
       required this.infoIcon,
       required this.infoTitle,
       required this.infoValue,
-      super.key});
+      super.key,});
 
   final Color infoThemeColour;
   final Widget infoIcon;
@@ -50,7 +50,7 @@ class UserInfoCard extends StatelessWidget {
                 Text(
                   infoValue,
                   style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w600),
+                      fontSize: 18, fontWeight: FontWeight.w600,),
                 ),
               ],
             ),

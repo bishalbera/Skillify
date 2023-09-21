@@ -15,6 +15,5 @@ import 'package:skillify/src/on_boarding/data/dataSources/on_boarding_local_data
 import 'package:skillify/src/on_boarding/presentation/cubit/on_boarding_cubit.dart';
 import 'package:skillify/src/on_boarding/presentation/views/on_boarding_screen.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'router.main.dart';

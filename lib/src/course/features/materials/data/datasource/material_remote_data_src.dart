@@ -43,7 +43,7 @@ class MaterialRemoteDataSrcImpl implements MaterialRemoteDataSrc {
             )
             .then((value) async {
           final url = _dbClient.from('courses').getPublicUrl(materialFilePath);
-          var materialModel =
+          final materialModel =
               (Resource as ResourceModel).copyWith(fileURL: url);
         });
       }

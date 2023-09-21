@@ -43,7 +43,7 @@ class VideoRemoteDataSrcImpl implements VideoRemoteDataSrc {
             )
             .then((value) async {
           final url = _dbClient.from('courses').getPublicUrl(thumbnailFilePath);
-          var videoModel = (video as VideoModel).copyWith(thumbnail: url);
+          final videoModel = (video as VideoModel).copyWith(thumbnail: url);
         });
       }
 
