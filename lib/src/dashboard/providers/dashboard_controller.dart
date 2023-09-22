@@ -8,6 +8,7 @@ import 'package:skillify/src/course/features/videos/presentation/cubit/video_cub
 
 import 'package:skillify/src/course/presentation/cubit/course_cubit.dart';
 import 'package:skillify/src/home/presentation/views/home_view.dart';
+import 'package:skillify/src/notification/presentation/cubit/notification_cubit.dart';
 import 'package:skillify/src/profile/presentation/views/profile_view.dart';
 
 class DashboardController extends ChangeNotifier {
@@ -18,12 +19,9 @@ class DashboardController extends ChangeNotifier {
         BottomItem(
           child: MultiBlocProvider(
             providers: [
-              BlocProvider(
-                create: (_) => sl<CourseCubit>(),
-              ),
-              BlocProvider(
-                create: (_) => sl<VideoCubit>(),
-              ),
+              BlocProvider(create: (_) => sl<CourseCubit>()),
+              BlocProvider(create: (_) => sl<VideoCubit>()),
+              BlocProvider.value(value: sl<NotificationCubit>()),
             ],
             child: const HomeView(),
           ),

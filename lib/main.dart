@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skillify/core/common/app/providers/course_of_the_day_notifier.dart';
+import 'package:skillify/core/common/app/providers/notifications_notifier.dart';
 import 'package:skillify/core/common/app/providers/user_provider.dart';
 import 'package:skillify/core/res/colours.dart';
 import 'package:skillify/core/res/fonts.dart';
@@ -30,18 +32,23 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => DashboardController()),
         ChangeNotifierProvider(create: (_) => CourseOfTheDayNotifier()),
+        ChangeNotifierProvider(
+          create: (_) => NotificationsNotifier(
+            sl<SharedPreferences>(),
+          ),
+        ),
       ],
       child: MaterialApp(
-        title: 'Skillify',
-        debugShowCheckedModeBanner: false,
+        title: 'Education App',
         theme: ThemeData(
-          colorScheme:
-              ColorScheme.fromSwatch(accentColor: Colours.primaryColour),
           useMaterial3: true,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           fontFamily: Fonts.poppins,
           appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.transparent,
+            color: Colors.transparent,
+          ),
+          colorScheme: ColorScheme.fromSwatch(
+            accentColor: Colours.primaryColour,
           ),
         ),
         onGenerateRoute: generateRoute,

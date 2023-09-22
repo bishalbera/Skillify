@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  audioplayers: ^5.1.0
   bloc: ^8.1.2
   chewie: ^1.7.0
   cupertino_icons: ^1.0.2
@@ -40,7 +41,8 @@ dependencies:
   rive: ^0.11.4
   supabase_flutter: ^1.10.16
   supabase_auth_ui: ^0.2.1
-  uuid: ^4.0.0
+  uuid: ^3.0.7
+  badges: ^3.1.2
 
 
 dev_dependencies:
@@ -62,6 +64,7 @@ flutter:
     - assets/lottie/
     - assets/icons/
     - assets/rive/
+    - assets/sounds/
 
   fonts:
     - family: Aeonik
