@@ -9,6 +9,29 @@ Future<void> init() async {
   await _initVideo();
   await _initMaterial();
   await _initExam();
+  await _initNotifications();
+}
+
+Future<void> _initNotifications() async {
+  sl
+    ..registerFactory(
+      () => NotificationCubit(
+        clear: sl(),
+        clearAll: sl(),
+        getNotifications: sl(),
+        markAsRead: sl(),
+        sendNotification: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => Clear(sl()))
+    ..registerLazySingleton(() => ClearAll(sl()))
+    ..registerLazySingleton(() => GetNotifications(sl()))
+    ..registerLazySingleton(() => MarkAsRead(sl()))
+    ..registerLazySingleton(() => SendNotification(sl()))
+    ..registerLazySingleton<NotificationRepo>(() => NotificationRepoImpl(sl()))
+    ..registerLazySingleton<NotificationRemoteDataSrc>(
+      () => NotificationRemoteDataSrcImpl(client: sl()),
+    );
 }
 
 Future<void> _initExam() async {

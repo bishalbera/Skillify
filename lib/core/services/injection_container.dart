@@ -38,6 +38,15 @@ import 'package:skillify/src/course/features/videos/domain/usecases/add_video.da
 import 'package:skillify/src/course/features/videos/domain/usecases/get_videos.dart';
 import 'package:skillify/src/course/features/videos/presentation/cubit/video_cubit.dart';
 import 'package:skillify/src/course/presentation/cubit/course_cubit.dart';
+import 'package:skillify/src/notification/data/datasources/notification_remote_data_src.dart';
+import 'package:skillify/src/notification/data/repos/notification_repo_impl.dart';
+import 'package:skillify/src/notification/domain/repos/notification_repo.dart';
+import 'package:skillify/src/notification/domain/usecases/clear.dart';
+import 'package:skillify/src/notification/domain/usecases/clear_all.dart';
+import 'package:skillify/src/notification/domain/usecases/get_notification.dart';
+import 'package:skillify/src/notification/domain/usecases/mark_as_read.dart';
+import 'package:skillify/src/notification/domain/usecases/send_notification.dart';
+import 'package:skillify/src/notification/presentation/cubit/notification_cubit.dart';
 import 'package:skillify/src/on_boarding/data/dataSources/on_boarding_local_data_sources.dart';
 import 'package:skillify/src/on_boarding/data/repos/on_boarding_repo_impl.dart';
 import 'package:skillify/src/on_boarding/domain/repos/on_boarding_repo.dart';
