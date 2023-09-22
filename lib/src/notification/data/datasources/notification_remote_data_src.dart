@@ -71,7 +71,7 @@ class NotificationRemoteDataSrcImpl implements NotificationRemoteDataSrc {
           .from('notifications')
           .select<PostgrestResponse>()
           .eq('userId', _client.auth.currentUser!.id)
-          .order('sentAT')
+          .order('sentAt')
           .asStream()
           .map((event) => event.data as List<dynamic>)
           .map(
