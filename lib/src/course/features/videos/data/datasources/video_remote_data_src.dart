@@ -6,6 +6,7 @@ import 'package:skillify/core/utils/typedef.dart';
 import 'package:skillify/src/course/features/videos/data/models/video_model.dart';
 import 'package:skillify/src/course/features/videos/domain/entities/video.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class VideoRemoteDataSrc {
   Future<List<VideoModel>> getVideos(String courseId);
@@ -25,32 +26,31 @@ class VideoRemoteDataSrcImpl implements VideoRemoteDataSrc {
 
   @override
   Future<void> addVideo(Video video) async {
-    VideoModel? videoModel;
+    //VideoModel? videoModel;
     try {
       await DataSourceUtils.authorizeUser(_client);
 
-      if (video.thumbnailIsFile) {
-        final thumbnailFilePath =
+      var videoModel = (video as VideoModel).copyWith(
+        id: const Uuid().v1(),
+      );
+      if (videoModel.thumbnailIsFile) {
+        final imagePath =
             'courses/${video.courseId}/videos/${video.id}/thumbnail';
-        await _dbClient
+        final imageRef = await _dbClient
             .from('courses')
             .upload(
-              thumbnailFilePath,
-              File(video.thumbnail!),
+              imagePath,
+              File(videoModel.thumbnail!),
               fileOptions: const FileOptions(
                 upsert: true,
               ),
             )
             .then((value) async {
-          final url = _dbClient.from('courses').getPublicUrl(thumbnailFilePath);
-          final videoModel = (video as VideoModel).copyWith(thumbnail: url);
-          print(videoModel);
+          final url = _dbClient.from('courses').getPublicUrl(imagePath);
+          videoModel = videoModel.copyWith(thumbnail: url);
         });
       }
-
-      if (videoModel != null) {
-        await _client.from('videos').upsert(videoModel.toMap());
-      }
+      await _client.from('videos').upsert(videoModel.toMap());
 
       final response = await _client
           .from('courses')
@@ -82,8 +82,9 @@ class VideoRemoteDataSrcImpl implements VideoRemoteDataSrc {
       await DataSourceUtils.authorizeUser(_client);
       final response = await _client
           .from('videos')
-          .select<PostgrestResponse>()
-          .eq('courseId', courseId);
+          .select()
+          .eq('courseId', courseId)
+          .execute();
       return (response.data as List)
           .map((video) => VideoModel.fromMap(video as DataMap))
           .toList();
