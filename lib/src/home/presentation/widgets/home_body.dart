@@ -7,6 +7,7 @@ import 'package:skillify/core/utils/core_utils.dart';
 import 'package:skillify/src/course/presentation/cubit/course_cubit.dart';
 import 'package:skillify/src/home/presentation/widgets/home_header.dart';
 import 'package:skillify/src/home/presentation/widgets/home_subjects.dart';
+import 'package:skillify/src/home/presentation/widgets/home_videos.dart';
 
 class HomeBody extends StatefulWidget {
   const HomeBody({super.key});
@@ -43,7 +44,7 @@ class _HomeBodyState extends State<HomeBody> {
       builder: (context, state) {
         if (state is LoadingCourses) {
           return const LoadingView();
-        } else if (state is CoursesLoaded && state.courses.isEmpty ||
+        } else if ((state is CoursesLoaded && state.courses.isEmpty) ||
             state is CourseError) {
           return const NotFoundText(
             'No courses found\nPlease contact admin or if you are admin, '
@@ -60,6 +61,8 @@ class _HomeBodyState extends State<HomeBody> {
               const HomeHeader(),
               const SizedBox(height: 20),
               HomeSubjects(courses: courses),
+              const SizedBox(height: 20),
+              const HomeVideos(),
             ],
           );
         }

@@ -44,10 +44,8 @@ class NotificationRemoteDataSrcImpl implements NotificationRemoteDataSrc {
     try {
       DataSourceUtils.authorizeUser(_client);
 
-      _client
-          .from('notifications')
-          .delete()
-          .eq('userId', _client.auth.currentUser!.id);
+      _client.from('notifications').delete();
+      //.eq('userId', _client.auth.currentUser!.id);
       return Future.value();
     } on PostgrestException catch (e) {
       throw ServerException(message: e.message, statusCode: e.code);
@@ -63,23 +61,20 @@ class NotificationRemoteDataSrcImpl implements NotificationRemoteDataSrc {
     try {
       DataSourceUtils.authorizeUser(_client);
 
-      _client.from('notifications').upsert({
-        'userId': _client.auth.currentUser!.id,
-      });
+      // _client.from('notifications').upsert({
+      //   'userId': _client.auth.currentUser!.id,
+      // });
 
       final res = _client
           .from('notifications')
-          .select<PostgrestResponse>()
-          .eq('userId', _client.auth.currentUser!.id)
+          .stream(primaryKey: ['id'])
+          //.eq('userId', _client.auth.currentUser!.id)
           .order('sentAt')
-          .asStream()
-          .map((event) => event.data as List<dynamic>)
+          .execute()
           .map(
-            (notifications) => notifications
+            (dataList) => dataList
                 .map(
-                  (notification) => NotificationModel.fromMap(
-                    notification as Map<String, dynamic>,
-                  ),
+                  NotificationModel.fromMap,
                 )
                 .toList(),
           );
@@ -95,6 +90,7 @@ class NotificationRemoteDataSrcImpl implements NotificationRemoteDataSrc {
     } on ServerException catch (e) {
       return Stream.error(e);
     } catch (e) {
+      print(e);
       return Stream.error(
         ServerException(message: e.toString(), statusCode: '505'),
       );
@@ -106,13 +102,10 @@ class NotificationRemoteDataSrcImpl implements NotificationRemoteDataSrc {
     try {
       await DataSourceUtils.authorizeUser(_client);
 
-      await _client
-          .from('notifications')
-          .update({
-            'seen': true,
-          })
-          .eq('id', notificationId)
-          .eq('userId', _client.auth.currentUser!.id);
+      await _client.from('notifications').update({
+        'seen': true,
+      }).eq('id', notificationId);
+      //.eq('userId', _client.auth.currentUser!.id);
 
       return Future.value();
     } on PostgrestException catch (e) {
@@ -129,19 +122,21 @@ class NotificationRemoteDataSrcImpl implements NotificationRemoteDataSrc {
     try {
       await DataSourceUtils.authorizeUser(_client);
 
-      final res = await _client.from('users').select<PostgrestResponse>();
+      // add notification to every user's notification collection
+      final response = await _client.from('users').select('id').execute();
 
-      final users = res.data as List<dynamic>;
+      final users = response.data as List;
 
       for (final user in users) {
-        final notificationModel = (notification as NotificationModel)
-            .copyWith(id: const Uuid().v4())
-            .toMap();
-
-        final insertRes =
-            await _client.from('notifications').insert(notificationModel);
+        final newNotificationRef = await _client
+            .from('notifications')
+            .insert((notification as NotificationModel)
+                .copyWith(id: const Uuid().v4())
+                .toMap(),)
+            .execute();
       }
     } on PostgrestException catch (e) {
+      print(e.message);
       throw ServerException(message: e.message, statusCode: e.code);
     } on ServerException {
       rethrow;

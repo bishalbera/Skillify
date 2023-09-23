@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:skillify/core/common/widgets/time_tile.dart';
+import 'package:skillify/core/extensions/string_extension.dart';
 import 'package:skillify/core/res/colours.dart';
 import 'package:skillify/core/res/media_res.dart';
 import 'package:skillify/src/course/features/videos/domain/entities/video.dart';
@@ -58,14 +60,14 @@ class VideoTile extends StatelessWidget {
                       color: Colors.black.withOpacity(.3),
                     ),
                     child: Center(
-                        // child: video.videoURL.isYoutubeVideo
-                        //     ? Image.asset(MediaRes.youtube, height: 40)
-                        //     : const Icon(
-                        //         Icons.play_arrow_rounded,
-                        //         color: Colors.white,
-                        //         size: 40,
-                        //       ),
-                        ),
+                      child: video.videoURL.isYoutubeVideo
+                          ? Image.asset(MediaRes.youtube, height: 40)
+                          : const Icon(
+                              Icons.play_arrow_rounded,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                    ),
                   ),
               ],
             ),
@@ -98,7 +100,10 @@ class VideoTile extends StatelessWidget {
                   ),
                 ),
                 Flexible(
-                  child: SizedBox.shrink(),
+                  child: TimeTile(
+                    video.uploadDate,
+                    prefixText: uploadTimePrefix,
+                  ),
                 ),
               ],
             ),

@@ -8,13 +8,11 @@ class Notification extends Equatable {
     required this.body,
     required this.category,
     required this.sentAt,
-    required this.userId,
     this.seen = false,
   });
 
   Notification.empty()
       : id = '_empty.id',
-        userId = '_empty.userId',
         title = '_empty.title',
         body = '_empty.body',
         category = NotificationCategory.NONE,
@@ -22,7 +20,7 @@ class Notification extends Equatable {
         sentAt = DateTime.now();
 
   final String id;
-  final String userId;
+
   final String title;
   final String body;
   final NotificationCategory category;

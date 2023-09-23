@@ -44,6 +44,7 @@ class VideoRemoteDataSrcImpl implements VideoRemoteDataSrc {
             .then((value) async {
           final url = _dbClient.from('courses').getPublicUrl(thumbnailFilePath);
           final videoModel = (video as VideoModel).copyWith(thumbnail: url);
+          print(videoModel);
         });
       }
 
@@ -53,9 +54,10 @@ class VideoRemoteDataSrcImpl implements VideoRemoteDataSrc {
 
       final response = await _client
           .from('courses')
-          .select<PostgrestResponse>('numberOfVideos')
+          .select('numberOfVideos')
           .eq('id', video.courseId)
-          .single();
+          .single()
+          .execute();
       final currentNumberOfVideos = response.data!['numberOfVideos'];
 
       final updateResponse = await _client.from('courses').update({
@@ -69,6 +71,7 @@ class VideoRemoteDataSrcImpl implements VideoRemoteDataSrc {
     } on ServerException {
       rethrow;
     } catch (e) {
+      print(e);
       throw ServerException(message: e.toString(), statusCode: '505');
     }
   }

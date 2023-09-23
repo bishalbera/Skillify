@@ -6,6 +6,7 @@ import 'package:skillify/core/extensions/context_extension.dart';
 import 'package:skillify/core/extensions/int_extensions.dart';
 import 'package:skillify/core/res/media_res.dart';
 import 'package:skillify/src/course/domain/entities/course.dart';
+import 'package:skillify/src/course/features/videos/presentation/views/course_videos_view.dart';
 
 class CourseDetailsScreen extends StatelessWidget {
   const CourseDetailsScreen(this.course, {super.key});
@@ -69,7 +70,7 @@ class CourseDetailsScreen extends StatelessWidget {
                         subtitle: ' Watch our tutorial '
                             'vidoes for ${course.title}',
                         onTap: () => Navigator.of(context).pushNamed(
-                          '/unknown-route',
+                          CourseVideosView.routeName,
                           arguments: course,
                         ),
                       ),

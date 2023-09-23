@@ -6,7 +6,6 @@ import 'package:skillify/src/notification/domain/entities/notification.dart';
 class NotificationModel extends Notification {
   const NotificationModel({
     required super.id,
-    required super.userId,
     required super.title,
     required super.body,
     required super.category,
@@ -17,18 +16,16 @@ class NotificationModel extends Notification {
   NotificationModel.fromMap(DataMap map)
       : super(
           id: map['id'] as String,
-          userId: map['userId'] as String,
           title: map['title'] as String,
           body: map['body'] as String,
           category: (map['category'] as String).toNotificationCategory,
           seen: map['seen'] as bool,
-          sentAt: DateTime.parse(map['sentAt'] as String) ?? DateTime.now(),
+          sentAt: DateTime.parse(map['sentAt'] as String),
         );
 
   NotificationModel.empty()
       : this(
           id: '_empty.id',
-          userId: '_empty.userId',
           title: '_empty.title',
           body: '_empty.body',
           category: NotificationCategory.NONE,
@@ -38,7 +35,6 @@ class NotificationModel extends Notification {
 
   NotificationModel copyWith({
     String? id,
-    String? userId,
     String? title,
     String? body,
     NotificationCategory? category,
@@ -47,7 +43,6 @@ class NotificationModel extends Notification {
   }) {
     return NotificationModel(
       id: id ?? this.id,
-      userId: userId ?? this.userId,
       title: title ?? this.title,
       body: body ?? this.body,
       category: category ?? this.category,
@@ -58,7 +53,6 @@ class NotificationModel extends Notification {
 
   DataMap toMap() => {
         'id': id,
-        'userId': userId,
         'title': title,
         'body': body,
         'category': category.value,
