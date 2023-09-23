@@ -68,7 +68,7 @@ Future<void> _initMaterial() async {
     ..registerLazySingleton(() => AddMaterial(sl()))
     ..registerLazySingleton(() => GetMaterials(sl()))
     ..registerLazySingleton<MaterialRepo>(() => MaterialRepoImpl(sl()))
-    ..registerLazySingleton(
+    ..registerLazySingleton<MaterialRemoteDataSrc>(
       () => MaterialRemoteDataSrcImpl(client: sl(), dbClient: sl()),
     );
 }

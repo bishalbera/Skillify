@@ -29,7 +29,8 @@ import 'package:skillify/src/course/features/materials/data/repos/material_repo_
 import 'package:skillify/src/course/features/materials/domain/repos/material_repo.dart';
 import 'package:skillify/src/course/features/materials/domain/usecases/add_material.dart';
 import 'package:skillify/src/course/features/materials/domain/usecases/get_materials.dart';
-import 'package:skillify/src/course/features/materials/presentation/cubit/material_cubit.dart';
+import 'package:skillify/src/course/features/materials/presentation/app/cubit/material_cubit.dart';
+
 
 import 'package:skillify/src/course/features/videos/data/datasources/video_remote_data_src.dart';
 import 'package:skillify/src/course/features/videos/data/repos/video_repo_impl.dart';

@@ -11,8 +11,10 @@ import 'package:skillify/src/auth/presentation/views/sign_up_screen.dart';
 import 'package:skillify/src/course/domain/entities/course.dart';
 import 'package:skillify/src/course/features/exams/presentation/cubit/exam_cubit.dart';
 import 'package:skillify/src/course/features/exams/presentation/views/add_exam_view.dart';
-import 'package:skillify/src/course/features/materials/presentation/add_materials_view.dart';
-import 'package:skillify/src/course/features/materials/presentation/cubit/material_cubit.dart';
+
+import 'package:skillify/src/course/features/materials/presentation/app/cubit/material_cubit.dart';
+import 'package:skillify/src/course/features/materials/presentation/views/add_materials_view.dart';
+
 import 'package:skillify/src/course/features/videos/presentation/cubit/video_cubit.dart';
 import 'package:skillify/src/course/features/videos/presentation/views/add_video_view.dart';
 import 'package:skillify/src/course/features/videos/presentation/views/course_videos_view.dart';

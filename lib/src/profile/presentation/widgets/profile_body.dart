@@ -8,7 +8,9 @@ import 'package:skillify/core/res/colours.dart';
 import 'package:skillify/core/res/media_res.dart';
 import 'package:skillify/core/services/injection_container.dart';
 import 'package:skillify/src/course/features/exams/presentation/views/add_exam_view.dart';
-import 'package:skillify/src/course/features/materials/presentation/add_materials_view.dart';
+import 'package:skillify/src/course/features/materials/presentation/views/add_materials_view.dart';
+
+
 import 'package:skillify/src/course/features/videos/presentation/views/add_video_view.dart';
 import 'package:skillify/src/course/presentation/cubit/course_cubit.dart';
 import 'package:skillify/src/course/presentation/widgets/add_course_sheet.dart';
