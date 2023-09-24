@@ -65,7 +65,12 @@ class ResourceController extends ChangeNotifier {
     );
     if (file.existsSync()) return file;
     try {
-      await _dbClient.from('courses').download(_resource!.fileURL).then(
+      await _dbClient
+          .from('courses')
+          .download(
+            'courses/${_resource?.courseId}/materials/${_resource!.id}/material',
+          )
+          .then(
         (value) async {
           final fileSize = value.lengthInBytes;
           const chunkSize = 1024 * 1024;
@@ -75,7 +80,7 @@ class ResourceController extends ChangeNotifier {
           while (offset < fileSize) {
             final end = min(offset + chunkSize, fileSize);
             final data = value.getRange(offset, end);
-            sink.add(data as List<int>);
+            sink.add(data.toList());
             downloadedSize += data.length;
             _percentage = downloadedSize / fileSize;
             notifyListeners();
@@ -93,6 +98,7 @@ class ResourceController extends ChangeNotifier {
       }
       return successful ? file : null;
     } catch (e) {
+      print(e);
       return null;
     } finally {
       _loading = false;

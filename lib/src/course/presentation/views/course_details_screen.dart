@@ -6,6 +6,7 @@ import 'package:skillify/core/extensions/context_extension.dart';
 import 'package:skillify/core/extensions/int_extensions.dart';
 import 'package:skillify/core/res/media_res.dart';
 import 'package:skillify/src/course/domain/entities/course.dart';
+import 'package:skillify/src/course/features/materials/presentation/views/course_materials_view.dart';
 import 'package:skillify/src/course/features/videos/presentation/views/course_videos_view.dart';
 
 class CourseDetailsScreen extends StatelessWidget {
@@ -56,7 +57,7 @@ class CourseDetailsScreen extends StatelessWidget {
                       course.numberOfVideos > 0) ...[
                     const SizedBox(height: 20),
                     const Text(
-                      'SUbject Details',
+                      'Subject Details',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
@@ -68,7 +69,7 @@ class CourseDetailsScreen extends StatelessWidget {
                         image: MediaRes.courseInfoVideo,
                         title: '${course.numberOfVideos} Video(s)',
                         subtitle: ' Watch our tutorial '
-                            'vidoes for ${course.title}',
+                            'videos for ${course.title}',
                         onTap: () => Navigator.of(context).pushNamed(
                           CourseVideosView.routeName,
                           arguments: course,
@@ -96,7 +97,7 @@ class CourseDetailsScreen extends StatelessWidget {
                             '${course.numberOfMaterials.estimate} materials '
                             'for ${course.title}',
                         onTap: () => Navigator.of(context).pushNamed(
-                          '/unknown-route',
+                          CourseMaterialsView.routeName,
                           arguments: course,
                         ),
                       ),

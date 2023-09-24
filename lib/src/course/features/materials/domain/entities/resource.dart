@@ -7,7 +7,6 @@ class Resource extends Equatable {
     required this.uploadDate,
     required this.fileURL,
     required this.isFile,
-    required this.fileSize,
     required this.fileExtension,
     this.title,
     this.author,
@@ -25,7 +24,6 @@ class Resource extends Equatable {
           courseId: '_empty.courseId',
           fileURL: '_empty.fileURL',
           author: '_empty.author',
-          fileSize: 0,
         );
 
   final String id;
@@ -34,7 +32,7 @@ class Resource extends Equatable {
   final String fileURL;
   final String fileExtension;
   final bool isFile;
-  final int fileSize;
+
   final String? title;
   final String? author;
   final String? description;
