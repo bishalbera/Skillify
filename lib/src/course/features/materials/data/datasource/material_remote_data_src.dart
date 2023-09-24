@@ -32,6 +32,8 @@ class MaterialRemoteDataSrcImpl implements MaterialRemoteDataSrc {
       if (material.isFile) {
         final materialFilePath =
             'courses/${material.courseId}/materials/${material.id}/material';
+        var file = File(materialFilePath);
+        var fileSizeInBytes = await file.length();
         await _dbClient
             .from('courses')
             .upload(

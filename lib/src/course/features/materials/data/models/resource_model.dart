@@ -9,6 +9,7 @@ class ResourceModel extends Resource {
     required super.fileURL,
     required super.fileExtension,
     required super.isFile,
+    required super.fileSize,
     super.title,
     super.author,
     super.description,
@@ -25,6 +26,7 @@ class ResourceModel extends Resource {
           courseId: '_empty.courseId',
           fileURL: '_empty.fileURL',
           author: '_empty.author',
+          fileSize: 0,
         );
 
   ResourceModel.fromMap(DataMap map)
@@ -38,6 +40,7 @@ class ResourceModel extends Resource {
           courseId: map['courseId'] as String,
           fileURL: map['fileURL'] as String,
           author: map['author'] as String?,
+          fileSize: map['fileSize'] as int,
         );
 
   ResourceModel copyWith({
@@ -50,6 +53,7 @@ class ResourceModel extends Resource {
     String? courseId,
     String? fileURL,
     String? author,
+    int? fileSize,
   }) {
     return ResourceModel(
       id: id ?? this.id,
@@ -61,6 +65,7 @@ class ResourceModel extends Resource {
       isFile: isFile ?? this.isFile,
       author: author ?? this.author,
       fileExtension: fileExtension ?? this.fileExtension,
+      fileSize: fileSize ?? this.fileSize,
     );
   }
 
@@ -75,6 +80,7 @@ class ResourceModel extends Resource {
       'author': author,
       'isFile': isFile,
       'fileExtension': fileExtension,
+      'fileSize': fileSize,
     };
   }
 }

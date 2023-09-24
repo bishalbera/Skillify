@@ -14,6 +14,7 @@ import 'package:skillify/src/course/features/exams/presentation/views/add_exam_v
 
 import 'package:skillify/src/course/features/materials/presentation/app/cubit/material_cubit.dart';
 import 'package:skillify/src/course/features/materials/presentation/views/add_materials_view.dart';
+import 'package:skillify/src/course/features/materials/presentation/views/course_materials_view.dart';
 
 import 'package:skillify/src/course/features/videos/presentation/cubit/video_cubit.dart';
 import 'package:skillify/src/course/features/videos/presentation/views/add_video_view.dart';

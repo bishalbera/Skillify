@@ -70,7 +70,8 @@ Future<void> _initMaterial() async {
     ..registerLazySingleton<MaterialRepo>(() => MaterialRepoImpl(sl()))
     ..registerLazySingleton<MaterialRemoteDataSrc>(
       () => MaterialRemoteDataSrcImpl(client: sl(), dbClient: sl()),
-    );
+    )
+    ..registerFactory(() => ResourceController(dbClient: sl(), prefs: sl()));
 }
 
 Future<void> _initVideo() async {

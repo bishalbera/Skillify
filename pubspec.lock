@@ -281,6 +281,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
+  file_icon:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: ab6433a9396c7fb8f472f9343ab36c8fe7cc6d58
+      url: "https://github.com/NonymousMorlock/file_icon"
+    source: git
+    version: "1.0.0"
   file_picker:
     dependency: "direct main"
     description:
