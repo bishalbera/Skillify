@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:skillify/core/errors/exceptions.dart';
 import 'package:skillify/core/utils/datasource_utils.dart';
 import 'package:skillify/core/utils/typedef.dart';
@@ -210,15 +212,16 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
       await DataSourceUtils.authorizeUser(_client);
       final examRes =
           await _client.from('exams').insert((exam as ExamModel).toMap());
-      final examId = await _client.from('exams').select('id');
+      final examId = await _client.from('exams').select('id').single();
+      if (kDebugMode) {
+        print('from remoredatasrc: $examId');
+      }
 
       final questions = exam.questions;
       if (questions != null && questions.isNotEmpty) {
         for (final question in questions) {
-          var questionToUpload = (question as ExamQuestionModel).copyWith(
-            examId: examId.toString(),
-            courseId: exam.courseId,
-          );
+          var questionToUpload = (question as ExamQuestionModel)
+              .copyWith(courseId: exam.courseId, examId: examId.toString());
 
           final newChoices = <QuestionChoiceModel>[];
           for (final choice in questionToUpload.choices) {
@@ -234,9 +237,10 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
 
           final response = await _client
               .from('courses')
-              .select<PostgrestResponse>('numberOfExams')
+              .select('numberOfExams')
               .eq('id', exam.courseId)
-              .single();
+              .single()
+              .execute();
           final currentNumberOfExams = response.data!['numberOfExams'];
 
           final updateResponse = await _client.from('courses').update({
@@ -244,11 +248,15 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
           }).eq('id', exam.courseId);
         }
       }
-    } on PostgrestException catch (e) {
+    } on PostgrestException catch (e, s) {
+      debugPrintStack(stackTrace: s);
+      print(e.message);
       throw ServerException(message: e.message, statusCode: e.code);
     } on ServerException {
       rethrow;
-    } catch (e) {
+    } catch (e, s) {
+      debugPrintStack(stackTrace: s);
+      print(e);
       throw ServerException(message: e.toString(), statusCode: '505');
     }
   }

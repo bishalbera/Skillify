@@ -101,6 +101,35 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         ),
         settings: settings,
       );
+    case ExamDetailsView.routeName:
+      return _pageBuilder(
+        (_) => BlocProvider(
+          create: (context) => sl<ExamCubit>(),
+          child: ExamDetailsView(settings.arguments! as Exam),
+        ),
+        settings: settings,
+      );
+    case ExamView.routeName:
+      return _pageBuilder(
+        (_) => BlocProvider(
+          create: (context) => sl<ExamCubit>(),
+          child: ChangeNotifierProvider(
+            create: (context) => ExamController(
+              exam: settings.arguments! as Exam,
+            ),
+            child: const ExamView(),
+          ),
+        ),
+        settings: settings,
+      );
+    case CourseExamsView.routeName:
+      return _pageBuilder(
+        (_) => BlocProvider(
+          create: (_) => sl<ExamCubit>(),
+          child: CourseExamsView(settings.arguments! as Course),
+        ),
+        settings: settings,
+      );
     case VideoPlayerView.routeName:
       return _pageBuilder(
         (_) => VideoPlayerView(videoURL: settings.arguments! as String),

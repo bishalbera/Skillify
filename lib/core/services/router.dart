@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skillify/core/common/views/page_under_construction.dart';
 import 'package:skillify/core/extensions/context_extension.dart';
@@ -9,8 +10,14 @@ import 'package:skillify/src/auth/presentation/bloc/auth_bloc.dart';
 import 'package:skillify/src/auth/presentation/views/sign_in_screen.dart';
 import 'package:skillify/src/auth/presentation/views/sign_up_screen.dart';
 import 'package:skillify/src/course/domain/entities/course.dart';
-import 'package:skillify/src/course/features/exams/presentation/cubit/exam_cubit.dart';
+import 'package:skillify/src/course/features/exams/domain/entities/exam.dart';
+import 'package:skillify/src/course/features/exams/presentation/app/cubit/exam_cubit.dart';
+import 'package:skillify/src/course/features/exams/presentation/app/providers/exam_controller.dart';
+
 import 'package:skillify/src/course/features/exams/presentation/views/add_exam_view.dart';
+import 'package:skillify/src/course/features/exams/presentation/views/course_exams_view.dart';
+import 'package:skillify/src/course/features/exams/presentation/views/exam_details_view.dart';
+import 'package:skillify/src/course/features/exams/presentation/views/exam_view.dart';
 
 import 'package:skillify/src/course/features/materials/presentation/app/cubit/material_cubit.dart';
 import 'package:skillify/src/course/features/materials/presentation/views/add_materials_view.dart';

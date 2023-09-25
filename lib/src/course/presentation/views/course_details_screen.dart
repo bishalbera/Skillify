@@ -6,6 +6,7 @@ import 'package:skillify/core/extensions/context_extension.dart';
 import 'package:skillify/core/extensions/int_extensions.dart';
 import 'package:skillify/core/res/media_res.dart';
 import 'package:skillify/src/course/domain/entities/course.dart';
+import 'package:skillify/src/course/features/exams/presentation/views/course_exams_view.dart';
 import 'package:skillify/src/course/features/materials/presentation/views/course_materials_view.dart';
 import 'package:skillify/src/course/features/videos/presentation/views/course_videos_view.dart';
 
@@ -83,7 +84,7 @@ class CourseDetailsScreen extends StatelessWidget {
                         title: '${course.numberOfExams} Exam(s)',
                         subtitle: 'Give exams for ${course.title}',
                         onTap: () => Navigator.of(context).pushNamed(
-                          '/unknown-route',
+                          CourseExamsView.routeName,
                           arguments: course,
                         ),
                       )

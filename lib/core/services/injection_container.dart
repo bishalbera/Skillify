@@ -23,7 +23,8 @@ import 'package:skillify/src/course/features/exams/domain/usecases/get_user_exam
 import 'package:skillify/src/course/features/exams/domain/usecases/submit_exam.dart';
 import 'package:skillify/src/course/features/exams/domain/usecases/update_exam.dart';
 import 'package:skillify/src/course/features/exams/domain/usecases/upload_exam.dart';
-import 'package:skillify/src/course/features/exams/presentation/cubit/exam_cubit.dart';
+import 'package:skillify/src/course/features/exams/presentation/app/cubit/exam_cubit.dart';
+
 import 'package:skillify/src/course/features/materials/data/datasource/material_remote_data_src.dart';
 import 'package:skillify/src/course/features/materials/data/repos/material_repo_impl.dart';
 import 'package:skillify/src/course/features/materials/domain/repos/material_repo.dart';
