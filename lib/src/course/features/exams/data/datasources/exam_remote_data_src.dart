@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:skillify/core/errors/exceptions.dart';
 import 'package:skillify/core/utils/datasource_utils.dart';
@@ -10,6 +11,7 @@ import 'package:skillify/src/course/features/exams/data/models/user_exam_model.d
 import 'package:skillify/src/course/features/exams/domain/entities/exam.dart';
 import 'package:skillify/src/course/features/exams/domain/entities/user_exam.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class ExamRemoteDataSrc {
   Future<List<ExamModel>> getExams(String courseId);
@@ -38,13 +40,19 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
       await DataSourceUtils.authorizeUser(_client);
       final response = await _client
           .from('questions')
-          .select<PostgrestResponse>()
-          .eq('exam_id', exam.id);
+          .select()
+          .eq('examId', exam.id)
+          .execute();
 
       final questions = response.data as List<dynamic>;
-      return questions
-          .map((e) => ExamQuestionModel.fromMap(e as DataMap))
-          .toList();
+
+      final resultList = <ExamQuestionModel>[];
+
+      for (final question in questions) {
+        resultList.add(ExamQuestionModel.fromMap(question as DataMap));
+      }
+
+      return resultList;
     } on PostgrestException catch (e) {
       throw ServerException(message: e.message, statusCode: e.code);
     } on ServerException {
@@ -60,8 +68,9 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
       await DataSourceUtils.authorizeUser(_client);
       final response = await _client
           .from('exams')
-          .select<PostgrestResponse>()
-          .eq('courseId', courseId);
+          .select()
+          .eq('courseId', courseId)
+          .execute();
 
       final exams = response.data as List<dynamic>;
       return exams.map((e) => ExamModel.fromMap(e as DataMap)).toList();
@@ -128,11 +137,11 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
       final userId = _client.auth.currentUser!.id;
       await _client.from('courses').upsert({
         'userId': userId,
-        'courseId': exam.courseId,
-        'courseName': exam.examTitle,
+        'id': exam.courseId,
+        'examTitle': exam.examTitle,
       });
 
-      await _client.from('exams').upsert((exam as UserExamModel).toMap());
+      await _client.from('userExam').upsert((exam as UserExamModel).toMap());
 
       // Calculate points
       final totalPoints = exam.answers
@@ -144,36 +153,58 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
       // Update user's points
       final response = await _client
           .from('users')
-          .select<PostgrestResponse>('points')
+          .select('points')
           .eq('id', userId)
-          .single();
+          .single()
+          .execute();
       final currentPoints = response.data!['points'];
 
       await _client
           .from('users')
-          .update({points: '$currentPoints + $points'}).eq('id', userId);
-      // Check if user is already enrolled in the course
+          .update({'points': currentPoints + points}).eq('id', userId);
+// Check if user is already enrolled in the course
       final userData = await _client
           .from('users')
-          .select<PostgrestResponse>('enrolledCourseIds')
+          .select('enrolledCourseIds')
           .eq('id', userId)
-          .single();
+          .single()
+          .execute();
 
-      final alreadyEnrolled = (userData.data['enrolledCourseIds'] as List?)
-              ?.contains(exam.courseId) ??
-          false;
+      final enrolledCourseIds = userData.data['enrolledCourseIds'];
 
-      //If not already enrolled, add course to user's enrolled courses
-      if (!alreadyEnrolled) {
-        await _client
-            .from('users')
-            .update({'enrolledCourseIds': exam.courseId}).eq('id', userId);
-      }
-    } on PostgrestException catch (e) {
+      if (enrolledCourseIds is List<String>) {
+        // The data is already a list of strings
+        if (!enrolledCourseIds.contains(exam.courseId)) {
+          // If not already enrolled, add the new course ID to the list
+          enrolledCourseIds.add(exam.courseId);
+
+          await _client.from('users').update(
+              {'enrolledCourseIds': enrolledCourseIds}).eq('id', userId);
+        }
+      } else if (enrolledCourseIds is List) {
+        // Handle the case where the data is a list of dynamic objects
+
+        final updatedCourseIds = [
+          ...enrolledCourseIds.map((item) => item.toString())
+        ];
+
+        if (!updatedCourseIds.contains(exam.courseId)) {
+          updatedCourseIds.add(exam.courseId);
+
+          await _client
+              .from('users')
+              .update({'enrolledCourseIds': updatedCourseIds}).eq('id', userId);
+        }
+      } else {}
+    } on PostgrestException catch (e, s) {
+      print(e.message);
+      debugPrintStack(stackTrace: s);
       throw ServerException(message: e.message, statusCode: e.code);
     } on ServerException {
       rethrow;
-    } catch (e) {
+    } catch (e, s) {
+      print(e);
+      debugPrintStack(stackTrace: s);
       throw ServerException(message: e.toString(), statusCode: '505');
     }
   }
@@ -212,7 +243,8 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
       await DataSourceUtils.authorizeUser(_client);
       final examRes =
           await _client.from('exams').insert((exam as ExamModel).toMap());
-      final examId = await _client.from('exams').select('id').single();
+      final examId =
+          (await _client.from('exams').select('id').single())['id'] as String;
       if (kDebugMode) {
         print('from remoredatasrc: $examId');
       }
@@ -221,19 +253,25 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
       if (questions != null && questions.isNotEmpty) {
         for (final question in questions) {
           var questionToUpload = (question as ExamQuestionModel)
-              .copyWith(courseId: exam.courseId, examId: examId.toString());
+              .copyWith(courseId: exam.courseId, examId: examId);
 
           final newChoices = <QuestionChoiceModel>[];
           for (final choice in questionToUpload.choices) {
             final newChoice = (choice as QuestionChoiceModel).copyWith(
-              questionId: question.id,
+              questionId: const Uuid().v4(),
             );
+            print('choice: ${newChoice.questionId}');
             newChoices.add(newChoice);
           }
-          questionToUpload = questionToUpload.copyWith(choices: newChoices);
+          questionToUpload = questionToUpload.copyWith(
+            choices: newChoices,
+            id: const Uuid().v4(),
+          );
 
           final questionRes =
               await _client.from('questions').insert(questionToUpload.toMap());
+
+          print(questionRes);
 
           final response = await _client
               .from('courses')

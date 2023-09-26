@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:skillify/core/utils/typedef.dart';
 import 'package:skillify/src/course/features/exams/data/models/question_choice_model.dart';
 import 'package:skillify/src/course/features/exams/domain/entities/exam_question.dart';
@@ -30,8 +32,9 @@ class ExamQuestionModel extends ExamQuestion {
           courseId: map['courseId'] as String,
           questionText: map['questionText'] as String,
           correctAnswer: map['correctAnswer'] as String,
-          choices: List<DataMap>.from(map['choices'] as List<dynamic>)
-              .map(QuestionChoiceModel.fromMap)
+          choices: (map['choices'] as List<dynamic>)
+              .map(
+                  (e) => QuestionChoiceModel.fromMap(e as Map<String, dynamic>))
               .toList(),
         );
 

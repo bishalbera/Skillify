@@ -10,24 +10,24 @@ class QuestionChoiceModel extends QuestionChoice {
 
   const QuestionChoiceModel.empty()
       : this(
-    questionId: 'Test String',
-    identifier: 'Test String',
-    choiceAnswer: 'Test String',
-  );
+          questionId: 'Test String',
+          identifier: 'Test String',
+          choiceAnswer: 'Test String',
+        );
 
   QuestionChoiceModel.fromMap(DataMap map)
       : this(
-    questionId: map['questionId'] as String,
-    identifier: map['identifier'] as String,
-    choiceAnswer: map['choiceAnswer'] as String,
-  );
+          questionId: map['questionId'] as String,
+          identifier: map['identifier'] as String,
+          choiceAnswer: map['choiceAnswer'] as String,
+        );
 
   QuestionChoiceModel.fromUploadMap(DataMap map)
       : this(
-    questionId: 'Test String',
-    identifier: map['identifier'] as String,
-    choiceAnswer: map['Answer'] as String,
-  );
+          questionId: 'Test String',
+          identifier: map['identifier'] as String,
+          choiceAnswer: map['Answer'] as String,
+        );
 
   QuestionChoiceModel copyWith({
     String? questionId,
