@@ -10,6 +10,8 @@ import 'package:skillify/src/course/presentation/cubit/course_cubit.dart';
 import 'package:skillify/src/home/presentation/views/home_view.dart';
 import 'package:skillify/src/notification/presentation/cubit/notification_cubit.dart';
 import 'package:skillify/src/profile/presentation/views/profile_view.dart';
+import 'package:skillify/src/quick_access/presentation/providers/quick_access_tab_controller.dart';
+import 'package:skillify/src/quick_access/presentation/views/quick_access_view.dart';
 
 class DashboardController extends ChangeNotifier {
   List<int> _indexHistory = [0];
@@ -30,7 +32,17 @@ class DashboardController extends ChangeNotifier {
       child: const PersistentView(),
     ),
     ChangeNotifierProvider(
-      create: (_) => BottomNavigator(BottomItem(child: const Placeholder())),
+      create: (_) => BottomNavigator(
+        BottomItem(
+          child: BlocProvider(
+            create: (context) => sl<CourseCubit>(),
+            child: ChangeNotifierProvider(
+              create: (_) => QuickAccessTabController(),
+              child: const QuickAccessView(),
+            ),
+          ),
+        ),
+      ),
       child: const PersistentView(),
     ),
     ChangeNotifierProvider(

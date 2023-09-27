@@ -32,7 +32,7 @@ class MaterialRemoteDataSrcImpl implements MaterialRemoteDataSrc {
 
       var materialModel =
           (material as ResourceModel).copyWith(id: const Uuid().v1());
-      var id = materialModel.id;
+      final id = materialModel.id;
 
       if (material.isFile) {
         final materialFilePath =

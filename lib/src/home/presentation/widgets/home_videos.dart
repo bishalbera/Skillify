@@ -7,7 +7,6 @@ import 'package:skillify/core/extensions/context_extension.dart';
 import 'package:skillify/core/services/injection_container.dart';
 import 'package:skillify/core/utils/core_utils.dart';
 import 'package:skillify/src/course/features/videos/presentation/cubit/video_cubit.dart';
-import 'package:skillify/src/course/features/videos/presentation/views/course_videos_view.dart';
 import 'package:skillify/src/home/presentation/widgets/section_header.dart';
 
 class HomeVideos extends StatefulWidget {

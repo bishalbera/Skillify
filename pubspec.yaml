@@ -41,6 +41,7 @@ dependencies:
   rive: ^0.11.4
   supabase_flutter: ^1.10.16
   supabase_auth_ui: ^0.2.1
+  step_progress_indicator: ^1.0.2
   uuid: ^3.0.7
   badges: ^3.1.2
   video_player: ^2.7.1

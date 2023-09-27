@@ -88,18 +88,23 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
     try {
       await DataSourceUtils.authorizeUser(_client);
       final response = await _client
-          .from('exams')
-          .select<PostgrestResponse>()
-          .eq('courseId', courseId);
+          .from('userExam')
+          .select()
+          .eq('courseId', courseId)
+          .execute();
       final exams = response.data as List<dynamic>;
+      print('fromgetusercourseexam: $exams');
       return exams
           .map((examData) => UserExamModel.fromMap(examData as DataMap))
           .toList();
     } on PostgrestException catch (e) {
+      print(e.message);
       throw ServerException(message: e.message, statusCode: e.code);
     } on ServerException {
       rethrow;
-    } catch (e) {
+    } catch (e, s) {
+      print(e);
+      debugPrintStack(stackTrace: s);
       throw ServerException(message: e.toString(), statusCode: '505');
     }
   }
@@ -111,21 +116,28 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
       final userId = _client.auth.currentUser!.id;
       final response = await _client
           .from('users')
-          .select<PostgrestResponse>('enrolledCourseIds')
+          .select('enrolledCourseIds')
           .eq('id', userId)
-          .single();
+          .single()
+          .execute();
       final coursesIds = response.data!['enrolledCourseIds'] as List<dynamic>;
       final exams = <UserExamModel>[];
       for (final courseId in coursesIds) {
         final courseExams = await getUserCourseExams(courseId.toString());
+        print('courseexams: ${courseExams.length}');
         exams.addAll(courseExams);
+        print(exams.first.answers);
+        print(exams.first.totalQuestions);
       }
       return exams;
     } on PostgrestException catch (e) {
+      print(e.message);
       throw ServerException(message: e.message, statusCode: e.code);
     } on ServerException {
       rethrow;
-    } catch (e) {
+    } catch (e, s) {
+      print(e);
+      debugPrintStack(stackTrace: s);
       throw ServerException(message: e.toString(), statusCode: '505');
     }
   }
@@ -148,6 +160,8 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
           .where((answer) => answer.isCorrect)
           .fold<int>(0, (previousValue, _) => previousValue + 1);
 
+      print('submitexam: ${exam.totalQuestions}');
+
       final pointPercent = totalPoints / exam.totalQuestions;
       final points = pointPercent * 100;
       // Update user's points
@@ -162,6 +176,16 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
       await _client
           .from('users')
           .update({'points': currentPoints + points}).eq('id', userId);
+      for (final answer in exam.answers) {
+        await _client.from('userChoice').upsert({
+          'questionId': answer
+              .questionId, // Replace 'questionId' with your actual field name
+          'userChoice': answer
+              .userChoice, // Replace 'userChoice' with your actual field name
+          'correctChoice': answer.correctChoice,
+          // Add other fields as needed
+        });
+      }
 // Check if user is already enrolled in the course
       final userData = await _client
           .from('users')

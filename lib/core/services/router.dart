@@ -11,6 +11,7 @@ import 'package:skillify/src/auth/presentation/views/sign_in_screen.dart';
 import 'package:skillify/src/auth/presentation/views/sign_up_screen.dart';
 import 'package:skillify/src/course/domain/entities/course.dart';
 import 'package:skillify/src/course/features/exams/domain/entities/exam.dart';
+import 'package:skillify/src/course/features/exams/domain/entities/user_exam.dart';
 import 'package:skillify/src/course/features/exams/presentation/app/cubit/exam_cubit.dart';
 import 'package:skillify/src/course/features/exams/presentation/app/providers/exam_controller.dart';
 
@@ -34,6 +35,7 @@ import 'package:skillify/src/notification/presentation/cubit/notification_cubit.
 import 'package:skillify/src/on_boarding/data/dataSources/on_boarding_local_data_sources.dart';
 import 'package:skillify/src/on_boarding/presentation/cubit/on_boarding_cubit.dart';
 import 'package:skillify/src/on_boarding/presentation/views/on_boarding_screen.dart';
+import 'package:skillify/src/quick_access/presentation/views/exam_history_details_screen.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 
 part 'router.main.dart';
