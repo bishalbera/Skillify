@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:skillify/core/errors/exceptions.dart';
 import 'package:skillify/core/utils/datasource_utils.dart';
 import 'package:skillify/src/notification/data/models/notification_model.dart';
@@ -40,11 +43,11 @@ class NotificationRemoteDataSrcImpl implements NotificationRemoteDataSrc {
   }
 
   @override
-  Future<void> clearAll() {
+  Future<void> clearAll() async {
     try {
-      DataSourceUtils.authorizeUser(_client);
+      await DataSourceUtils.authorizeUser(_client);
 
-      _client.from('notifications').delete();
+      await _client.from('notifications').delete();
       //.eq('userId', _client.auth.currentUser!.id);
       return Future.value();
     } on PostgrestException catch (e) {
@@ -101,13 +104,19 @@ class NotificationRemoteDataSrcImpl implements NotificationRemoteDataSrc {
   Future<void> markAsRead(String notificationId) async {
     try {
       await DataSourceUtils.authorizeUser(_client);
-
-      await _client.from('notifications').update({
-        'seen': true,
-      }).eq('id', notificationId);
-      //.eq('userId', _client.auth.currentUser!.id);
-
-      return Future.value();
+      final data = {
+        'id': notificationId,
+      };
+      final res = await http.put(
+        Uri.parse('https://comparative-turquoise.cmd.outerbase.io/markasread'),
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: jsonEncode(data),
+      );
+      if (res.statusCode == 200) {
+        print('marked as read');
+      }
     } on PostgrestException catch (e) {
       throw ServerException(message: e.message, statusCode: e.code);
     } on ServerException {
@@ -123,16 +132,22 @@ class NotificationRemoteDataSrcImpl implements NotificationRemoteDataSrc {
       await DataSourceUtils.authorizeUser(_client);
 
       // add notification to every user's notification collection
-      final response = await _client.from('users').select('id').execute();
+      final response = await _client
+          .from('users')
+          .select('id')
+          .eq('id', _client.auth.currentUser!.id)
+          .execute();
 
       final users = response.data as List;
 
       for (final user in users) {
         final newNotificationRef = await _client
             .from('notifications')
-            .insert((notification as NotificationModel)
-                .copyWith(id: const Uuid().v4())
-                .toMap(),)
+            .insert(
+              (notification as NotificationModel)
+                  .copyWith(id: const Uuid().v4())
+                  .toMap(),
+            )
             .execute();
       }
     } on PostgrestException catch (e) {

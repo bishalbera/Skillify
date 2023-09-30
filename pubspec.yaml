@@ -51,6 +51,7 @@ dependencies:
     git:
       url: https://github.com/NonymousMorlock/file_icon
   http: ^0.13.6
+  flutter_spinkit: ^5.2.0
 
 
 dev_dependencies:

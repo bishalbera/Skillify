@@ -49,7 +49,7 @@ class TinderCard extends StatelessWidget {
                     Icon(IconlyLight.notification, color: Colors.white),
                     SizedBox(width: 8),
                     Text(
-                      '45 minutes',
+                      '10 minutes',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,

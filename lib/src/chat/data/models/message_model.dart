@@ -22,11 +22,20 @@ class MessageModel extends Message {
   MessageModel.fromMap(DataMap map)
       : this(
           id: map['id'] as String,
-          senderId: map['senderid'] as String,
+          senderId: map['sender_id'] as String,
           message: map['message'] as String,
-          groupId: map['groupid'] as String,
-          timestamp: DateTime.parse(map['lastMessageTimeStamp'] as String),
+          groupId: map['group_id'] as String,
+          timestamp: _parseDate(map['timestamp'] as String?),
         );
+
+  static DateTime _parseDate(String? date) {
+    try {
+      return DateTime.parse(date!);
+    } catch (e) {
+      print('Invalid date format: $date');
+      return DateTime.now(); // return current date as a fallback
+    }
+  }
 
   MessageModel copyWith({
     String? id,

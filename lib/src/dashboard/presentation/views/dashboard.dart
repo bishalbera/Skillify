@@ -97,6 +97,18 @@ class _DashboardState extends State<Dashboard> {
                     label: 'User',
                     backgroundColor: Colors.white,
                   ),
+                  BottomNavigationBarItem(
+                    icon: Icon(
+                      controller.currentIndex == 4
+                          ? IconlyBold.chart
+                          : IconlyLight.chart,
+                      color: controller.currentIndex == 4
+                          ? Colours.primaryColour
+                          : Colors.grey,
+                    ),
+                    label: 'Leaderboard',
+                    backgroundColor: Colors.white,
+                  ),
                 ],
               ),
             );

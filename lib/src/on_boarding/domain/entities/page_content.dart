@@ -14,9 +14,7 @@ class PageContent extends Equatable {
           animation: MediaRes.shapes,
           image: MediaRes.spline,
           title: 'Brand new curriculum',
-          description:
-              ' We have a brand new curriculum that will help you learn the skills '
-              'you need to get a job in the tech industry.',
+          description: ' Upgrade your skills with skillify ',
         );
 
   const PageContent.second()
@@ -24,9 +22,8 @@ class PageContent extends Equatable {
           animation: MediaRes.shapes,
           image: MediaRes.spline,
           title: 'Brand new curriculum',
-          description:
-              ' We have a brand new curriculum that will help you learn the skills '
-              'you need to get a job in the tech industry.',
+          description: ' Skillify will help you to upskill so  '
+              'you  get a job in the tech industry.',
         );
 
   const PageContent.third()
@@ -34,9 +31,8 @@ class PageContent extends Equatable {
           animation: MediaRes.shapes,
           image: MediaRes.spline,
           title: 'Brand new curriculum',
-          description:
-              ' We have a brand new curriculum that will help you learn the skills '
-              'you need to get a job in the tech industry.',
+          description: ' Join diverse community, '
+              'give exams and lot more. ',
         );
 
   final String animation;

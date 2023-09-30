@@ -4,10 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:skillify/core/common/app/providers/bottom_navigator.dart';
 import 'package:skillify/core/common/views/persistent_view.dart';
 import 'package:skillify/core/services/injection_container.dart';
+import 'package:skillify/src/chat/presentation/cubit/chat_cubit.dart';
+import 'package:skillify/src/chat/presentation/views/groups_view.dart';
 import 'package:skillify/src/course/features/videos/presentation/cubit/video_cubit.dart';
 
 import 'package:skillify/src/course/presentation/cubit/course_cubit.dart';
 import 'package:skillify/src/home/presentation/views/home_view.dart';
+import 'package:skillify/src/leaderboard/presentation/cubit/leaderboard_cubit.dart';
+import 'package:skillify/src/leaderboard/presentation/views/leaderboard_view.dart';
 import 'package:skillify/src/notification/presentation/cubit/notification_cubit.dart';
 import 'package:skillify/src/profile/presentation/views/profile_view.dart';
 import 'package:skillify/src/quick_access/presentation/providers/quick_access_tab_controller.dart';
@@ -46,11 +50,29 @@ class DashboardController extends ChangeNotifier {
       child: const PersistentView(),
     ),
     ChangeNotifierProvider(
-      create: (_) => BottomNavigator(BottomItem(child: const Placeholder())),
+      create: (_) => BottomNavigator(
+        BottomItem(
+          child: BlocProvider(
+            create: (_) => sl<ChatCubit>(),
+            child: const GroupsView(),
+          ),
+        ),
+      ),
       child: const PersistentView(),
     ),
     ChangeNotifierProvider(
       create: (_) => BottomNavigator(BottomItem(child: const ProfileView())),
+      child: const PersistentView(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => BottomNavigator(
+        BottomItem(
+          child: BlocProvider(
+            create: (_) => sl<LeaderboardCubit>(),
+            child: const LeaderboardView(),
+          ),
+        ),
+      ),
       child: const PersistentView(),
     ),
   ];

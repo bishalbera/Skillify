@@ -33,10 +33,19 @@ class GroupModel extends Group {
           members: List<String>.from(map['members'] as List<dynamic>),
           lastMessage: map['lastMessage'] as String?,
           groupImageUrl: map['groupImageUrl'] as String?,
-          lastMessageSenderName: map['lastMessageSenderName'] as String?,
+          lastMessageSenderName: map['lastMessageSenderName'] as String? ?? '',
           lastMessageTimeStamp:
-              DateTime.parse(map['lastMessageTimeStamp'] as String),
+              _parseDate(map['lastMessageTimeStamp'] as String? ?? ''),
         );
+
+  static DateTime _parseDate(String date) {
+    try {
+      return DateTime.parse(date);
+    } catch (e) {
+      print('Invalid date format: $date');
+      return DateTime.now();
+    }
+  }
 
   GroupModel copyWith({
     String? id,

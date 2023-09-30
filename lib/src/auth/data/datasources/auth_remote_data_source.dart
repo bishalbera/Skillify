@@ -89,11 +89,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       userData = await _getUserData(user.id);
       return LocalUserModel.fromMap(userData);
     } on AuthException catch (e) {
+      print(e);
       throw ServerException(
         message: e.message ?? 'Error Occured',
         statusCode: e.statusCode,
       );
     } catch (e, s) {
+      print(e);
       debugPrintStack(stackTrace: s);
       throw ServerException(
         message: e.toString(),

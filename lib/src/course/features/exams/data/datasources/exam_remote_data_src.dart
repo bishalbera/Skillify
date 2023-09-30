@@ -12,6 +12,7 @@ import 'package:skillify/src/course/features/exams/domain/entities/exam.dart';
 import 'package:skillify/src/course/features/exams/domain/entities/user_exam.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 abstract class ExamRemoteDataSrc {
   Future<List<ExamModel>> getExams(String courseId);
@@ -164,7 +165,7 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
 
       final pointPercent = totalPoints / exam.totalQuestions;
       final points = pointPercent * 100;
-      // Update user's points
+
       final response = await _client
           .from('users')
           .select('points')
@@ -178,15 +179,12 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
           .update({'points': currentPoints + points}).eq('id', userId);
       for (final answer in exam.answers) {
         await _client.from('userChoice').upsert({
-          'questionId': answer
-              .questionId, // Replace 'questionId' with your actual field name
-          'userChoice': answer
-              .userChoice, // Replace 'userChoice' with your actual field name
+          'questionId': answer.questionId,
+          'userChoice': answer.userChoice,
           'correctChoice': answer.correctChoice,
-          // Add other fields as needed
         });
       }
-// Check if user is already enrolled in the course
+
       final userData = await _client
           .from('users')
           .select('enrolledCourseIds')
@@ -197,17 +195,14 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
       final enrolledCourseIds = userData.data['enrolledCourseIds'];
 
       if (enrolledCourseIds is List<String>) {
-        // The data is already a list of strings
         if (!enrolledCourseIds.contains(exam.courseId)) {
-          // If not already enrolled, add the new course ID to the list
           enrolledCourseIds.add(exam.courseId);
 
           await _client.from('users').update(
-              {'enrolledCourseIds': enrolledCourseIds}).eq('id', userId);
+            {'enrolledCourseIds': enrolledCourseIds},
+          ).eq('id', userId);
         }
       } else if (enrolledCourseIds is List) {
-        // Handle the case where the data is a list of dynamic objects
-
         final updatedCourseIds = [
           ...enrolledCourseIds.map((item) => item.toString())
         ];
@@ -296,19 +291,18 @@ class ExamRemoteDataSrcImpl implements ExamRemoteDataSrc {
               await _client.from('questions').insert(questionToUpload.toMap());
 
           print(questionRes);
-
-          final response = await _client
-              .from('courses')
-              .select('numberOfExams')
-              .eq('id', exam.courseId)
-              .single()
-              .execute();
-          final currentNumberOfExams = response.data!['numberOfExams'];
-
-          final updateResponse = await _client.from('courses').update({
-            'numberOfExams': currentNumberOfExams + 1,
-          }).eq('id', exam.courseId);
         }
+        final response = await _client
+            .from('courses')
+            .select('numberOfExams')
+            .eq('id', exam.courseId)
+            .single()
+            .execute();
+        final currentNumberOfExams = response.data!['numberOfExams'];
+
+        final updateResponse = await _client.from('courses').update({
+          'numberOfExams': currentNumberOfExams + 1,
+        }).eq('id', exam.courseId);
       }
     } on PostgrestException catch (e, s) {
       debugPrintStack(stackTrace: s);

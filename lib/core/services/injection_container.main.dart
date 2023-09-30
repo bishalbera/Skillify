@@ -11,6 +11,21 @@ Future<void> init() async {
   await _initExam();
   await _initNotifications();
   await _initChat();
+  await _initLeaderboard();
+}
+
+Future<void> _initLeaderboard() async {
+  sl
+    ..registerFactory(
+      () => LeaderboardCubit(
+        getTopLearners: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => GetTopLearners(sl()))
+    ..registerLazySingleton<LeaderboardRepo>(() => LeaderboardRepoImpl(sl()))
+    ..registerLazySingleton<LeaderboardRemoteDataSource>(
+      () => LeaderboardRemoteDataSourceImpl(client: sl()),
+    );
 }
 
 Future<void> _initChat() async {

@@ -11,8 +11,6 @@ import 'package:skillify/src/chat/data/models/message_model.dart';
 import 'package:skillify/src/chat/domain/entities/message.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:uuid/uuid.dart';
-
 abstract class ChatRemoteDataSource {
   const ChatRemoteDataSource();
 
@@ -37,31 +35,17 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   final SupabaseClient _client;
 
   @override
-  Stream<List<GroupModel>> getGroups() async* {
+  Stream<List<GroupModel>> getGroups() {
     try {
-      await DataSourceUtils.authorizeUser(_client);
-      final response = await http.get(
-        Uri.parse('https://comparative-turquoise.cmd.outerbase.io/groups'),
+      DataSourceUtils.authorizeUser(_client);
+      final groupStream = _client.from('groups').stream(primaryKey: ['id']).map(
+        (event) => event
+            .map(
+              GroupModel.fromMap,
+            )
+            .toList(),
       );
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body) as Map<String, dynamic>;
-
-        if (responseData.containsKey('response') &&
-            responseData['response'] is Map<String, dynamic> &&
-            responseData['response']['items'] is List) {
-          final data = responseData['response']['items'] as List<dynamic>;
-
-          final groups = data.map((item) {
-            return GroupModel.fromMap(item as DataMap);
-          }).toList();
-
-          yield groups;
-        } else {
-          throw Exception('Invalid response data format');
-        }
-      } else {
-        throw Exception('Failed to fetch groups: ${response.body}');
-      }
+      return groupStream;
     } catch (e, s) {
       print(e);
       debugPrintStack(stackTrace: s);
@@ -70,28 +54,26 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   }
 
   @override
-  Stream<List<MessageModel>> getMessages(String groupId) async* {
+  Stream<List<MessageModel>> getMessages(String groupId) {
     try {
-      await DataSourceUtils.authorizeUser(_client);
-
-      final url = Uri.parse(
-        'https://comparative-turquoise.cmd.outerbase.io/getmessages?groupId=$groupId',
-      );
-
-      final res = await http.get(url);
-      if (res.statusCode == 200) {
-        final jsonResponse = json.decode(res.body) as DataMap;
-        if (jsonResponse['success'] == true) {
-          final items = jsonResponse['response']['items'] as List;
-          final messages = items
-              .map((data) => MessageModel.fromMap(data as DataMap))
-              .toList();
-          yield messages;
-        }
-      }
+      DataSourceUtils.authorizeUser(_client);
+      final messageStream = _client
+          .from('messages')
+          .stream(primaryKey: ['id'])
+          .order('timestamp')
+          .eq('group_id', groupId)
+          .map(
+            (event) => event
+                .map(
+                  MessageModel.fromMap,
+                )
+                .toList(),
+          );
+      return messageStream;
     } catch (e, s) {
       print(e);
       debugPrintStack(stackTrace: s);
+
       throw ServerException(message: e.toString(), statusCode: '505');
     }
   }
@@ -150,6 +132,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
 
       final updateResponse = await _client.from('users').upsert([
         {
+          'id': userId,
           'groupIds': existingGroups,
         }
       ]).execute();
@@ -201,6 +184,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
 
       final updateResponse = await _client.from('users').upsert([
         {
+          'id': userId,
           'groupIds': existingGroups,
         }
       ]).execute();
@@ -221,8 +205,9 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     try {
       await DataSourceUtils.authorizeUser(_client);
       final messageData = {
-        'groupid': message.groupId,
-        'id': const Uuid().v4(),
+        'group_id': message.groupId,
+        'sender_id': _client.auth.currentUser!.id,
+        'message': message.message,
       };
       final res = await http.post(
         Uri.parse('https://comparative-turquoise.cmd.outerbase.io/messages'),
@@ -234,16 +219,22 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
 
       if (res.statusCode == 200) {
         print('message sent');
+      } else {
+        print(
+          'Failed sending messages. Status code: ${res.statusCode}, '
+          'Response body: ${res.body}',
+        );
       }
       final userName = await _client
           .from('users')
           .select('name')
           .eq('id', _client.auth.currentUser!.id);
+
       await _client.from('groups').update({
         'lastMessage': message.message,
         'lastMessageSenderName': userName,
-        'lastMessageTimestamp': message.timestamp,
-      });
+        'lastMessageTimeStamp': message.timestamp.toIso8601String(),
+      }).eq('id', message.groupId);
     } catch (e, s) {
       print(e);
       debugPrintStack(stackTrace: s);

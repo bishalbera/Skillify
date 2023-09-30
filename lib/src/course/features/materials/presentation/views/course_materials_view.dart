@@ -58,7 +58,7 @@ class _CourseMaterialsViewState extends State<CourseMaterialsView> {
             } else if ((state is MaterialsLoaded && state.materials.isEmpty) ||
                 state is MaterialError) {
               return NotFoundText(
-                'No videos found for ${widget.course.title}',
+                'No materials found for ${widget.course.title}',
               );
             } else if (state is MaterialsLoaded) {
               final materials = state.materials

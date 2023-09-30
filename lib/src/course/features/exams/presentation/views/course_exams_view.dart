@@ -53,7 +53,7 @@ class _CourseExamsViewState extends State<CourseExamsView> {
           } else if ((state is ExamsLoaded && state.exams.isEmpty) ||
               state is ExamError) {
             return NotFoundText(
-              'No videos found for ${widget.course.title}',
+              'No exams found for ${widget.course.title}',
             );
           } else if (state is ExamsLoaded) {
             return SafeArea(

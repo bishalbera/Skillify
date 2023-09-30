@@ -36,17 +36,6 @@ class CourseRemoteDataSrcImpl implements CourseRemoteDataSrc {
           statusCode: '401',
         );
       }
-      // final courseRef = await _client.from('courses').select();
-      // final courseRefId = await _client
-      //     .from('courses')
-      //     .insert([
-      //       {'id'}
-      //     ])
-      //     .select()
-      //     .limit(1)
-      //     .single();
-      // final groupRef = await _client.from('groups').select();
-      // final groupRefId = await _client.from('groups').select('id');
 
       var courseModel = (course as CourseModel).copyWith(
         id: const Uuid().v1(),
