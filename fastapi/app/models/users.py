@@ -6,13 +6,13 @@ class LocalUser(Base):
   
   id = Column(Integer, primary_key= True, nullable= False)
   name = Column(String, nullable= False)
-  email = Column(String, nullable= False)
+  email = Column(String, nullable= False, unique= True)
   password = Column(String, nullable=False)
   points = Column(Integer, nullable= False)
   bio = Column(String, nullable= True)
   profile_pic = Column(String, nullable= True)
-  group_ids = Column(ARRAY)
-  enrolled_course_ids = Column(ARRAY)
-  followings = Column(ARRAY)
-  followers = Column(ARRAY)
+  group_ids = Column(ARRAY(Integer))
+  enrolled_course_ids = Column(ARRAY(Integer))
+  followings = Column(ARRAY(Integer))
+  followers = Column(ARRAY(Integer))
 
